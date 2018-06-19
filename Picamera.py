@@ -33,7 +33,7 @@ counter = 0
 direction = ""
 #PID
 setx = 320
-P = 
+P = 1
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
 camera.resolution = (640, 480)
