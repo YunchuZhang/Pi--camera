@@ -32,8 +32,8 @@ counter = 0
 (dX, dY) = (0, 0)
 direction = ""
 #PID
-
-
+setx = 320
+P = 
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
 camera.resolution = (640, 480)
@@ -82,7 +82,11 @@ elif dxl_error != 0:
     print("%s" % packetHandler.getRxPacketError(dxl_error))
 else:
     print("Dynamixel has been successfully connected")
-
+dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, 515)
+if dxl_comm_result != COMM_SUCCESS:
+	print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+elif dxl_error != 0:
+	print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 # allow the camera or video file to warm up
 time.sleep(0.2)
@@ -184,19 +188,27 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		(10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
 		0.35, (0, 0, 255), 1)
 	#Motor
+	# PID
+	Perr = 1 * (dX - setx)
 	#Read
-	dxl_goal_position = int (dX * 0.9656 + 206) 
+	dxl_goal_position = int (Perr * 0.9656 + 515) 
+	if dxl_goal_position > 824:
+		dxl_goal_position = 824
+	elif dxl_goal_position < 206:
+		dxl_goal_position = 206
+
 	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
 		print("%s" % packetHandler.getRxPacketError(dxl_error))
 		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
-	if abs(dxl_goal_position - dxl_present_position) > 5:
+	if abs(dxl_goal_position - dxl_present_position) > 3:
 	#Image feedback	
 	# Write
 		#x 0~640 y 0~480
 		#206 515 824
+		# -320 ~320 
 		#P = P * (dX * 0.9656 + 206 - dxl_present_position)
 
 		
@@ -211,7 +223,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 
 	# show the frame to our screen
-	#cv2.imshow("Frame", image)
+	cv2.imshow("Frame", image)
 	key = cv2.waitKey(1) & 0xFF
 	counter+=1
         # clear the stream in preparation for the next frame
