@@ -143,27 +143,30 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			# compute the difference between the x and y
 			# coordinates and re-initialize the direction
 			# text variables
-			dX = pts[-10][0] - pts[i][0]
-			dY = pts[-10][1] - pts[i][1]
-			(dirX, dirY) = ("", "")
+			for j in range(-10,i+1):
+				dX += pts[j][0]
+				dY += pts[j][1]
+			dX = dX/12
+			dY = dY/12
+			# (dirX, dirY) = ("", "")
  
 			# ensure there is significant movement in the
 			# x-direction
-			if np.abs(dX) > 20:
-				dirX = "East" if np.sign(dX) == 1 else "West"
+			# if np.abs(dX) > 20:
+			# 	dirX = "East" if np.sign(dX) == 1 else "West"
  
-			# ensure there is significant movement in the
-			# y-direction
-			if np.abs(dY) > 20:
-				dirY = "North" if np.sign(dY) == 1 else "South"
+			# # ensure there is significant movement in the
+			# # y-direction
+			# if np.abs(dY) > 20:
+			# 	dirY = "North" if np.sign(dY) == 1 else "South"
  
-			# handle when both directions are non-empty
-			if dirX != "" and dirY != "":
-				direction = "{}-{}".format(dirY, dirX)
+			# # handle when both directions are non-empty
+			# if dirX != "" and dirY != "":
+			# 	direction = "{}-{}".format(dirY, dirX)
  
-			# otherwise, only one direction is non-empty
-			else:
-				direction = dirX if dirX != "" else dirY
+			# # otherwise, only one direction is non-empty
+			# else:
+			# 	direction = dirX if dirX != "" else dirY
 
  
 		# otherwise, compute the thickness of the line and
