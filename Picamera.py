@@ -185,6 +185,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		0.35, (0, 0, 255), 1)
 	#Motor
 	#Read
+	dxl_goal_position = int (dX * 0.9656 + 206) 
 	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -198,7 +199,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		#206 515 824
 		#P = P * (dX * 0.9656 + 206 - dxl_present_position)
 
-		dxl_goal_position = int (dX * 0.9656 + 206) 
+		
 		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, dxl_goal_position)
 		if dxl_comm_result != COMM_SUCCESS:
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
