@@ -139,15 +139,15 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 		# check to see if enough points have been accumulated in
 		# the buffer
-		if counter >= 10 and i == 1 and pts[-10] is not None:
+		if counter >= 4 and i == 1 and pts[-4] is not None:
 			# compute the difference between the x and y
 			# coordinates and re-initialize the direction
 			# text variables
-			for j in range(-10,i+1):
+			for j in range(-4,i+1):
 				dX += pts[j][0]
 				dY += pts[j][1]
-			dX = dX/12
-			dY = dY/12
+			dX = dX/6
+			dY = dY/6
 			# (dirX, dirY) = ("", "")
  
 			# ensure there is significant movement in the
