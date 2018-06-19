@@ -31,7 +31,8 @@ pts = deque(maxlen=args["buffer"])
 counter = 0
 (dX, dY) = (0, 0)
 direction = ""
-
+#PID
+P = 
 
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
@@ -40,7 +41,7 @@ camera.framerate = 45
 rawCapture = PiRGBArray(camera, size=(640, 480))
 
 
-# Goal position
+# Init Goal position
 dxl_goal_position =515 
 
 
@@ -190,15 +191,24 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	elif dxl_error != 0:
 		print("%s" % packetHandler.getRxPacketError(dxl_error))
 		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
-	if abs(dxl_goal_position - dxl_present_position) > DXL_MOVING_STATUS_THRESHOLD:	
+	if abs(dxl_goal_position - dxl_present_position) > 5:
+	#Image feedback	
 	# Write
+		#x 0~640 y 0~480
+		#206 515 824
+		#P = P * (dX * 0.9656 + 206 - dxl_present_position)
+
+		dxl_goal_position = dX * 0.9656 + 206 
 		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, dxl_goal_position)
 		if dxl_comm_result != COMM_SUCCESS:
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 		elif dxl_error != 0:
 			print("%s" % packetHandler.getRxPacketError(dxl_error))
 
-        
+
+	
+
+
 	# show the frame to our screen
 	cv2.imshow("Frame", image)
 	key = cv2.waitKey(1) & 0xFF
