@@ -41,7 +41,7 @@ DXL_MOVING_STATUS_THRESHOLD = 20                # Dynamixel moving status thresh
 
 
 
-from dynamix import *
+from dynamixel_sdk import * 
 from collections import deque
 import numpy as np
 from picamera.array import PiRGBArray
