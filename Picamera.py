@@ -223,18 +223,18 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	#Read
 	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
 	if dxl_comm_result != COMM_SUCCESS:
-    	print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-	elif dxl_error != 0:
+		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    elif dxl_error != 0:
     	print("%s" % packetHandler.getRxPacketError(dxl_error))
     	print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position[index], dxl_present_position))
-	if not abs(dxl_goal_position[index] - dxl_present_position) > DXL_MOVING_STATUS_THRESHOLD:
-		break
+    if not abs(dxl_goal_position[index] - dxl_present_position) > DXL_MOVING_STATUS_THRESHOLD:
+    	break
 	# Write
 	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, dxl_goal_position)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
-    	print("%s" % packetHandler.getRxPacketError(dxl_error))
+		print("%s" % packetHandler.getRxPacketError(dxl_error))
 
         
 	# show the frame to our screen
