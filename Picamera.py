@@ -146,8 +146,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			for j in range(-3,i+1):
 				dX += pts[j][0]
 				dY += pts[j][1]
-			dX = dX/5
-			dY = dY/5
+			dX = int(dX/5)
+			dY = int(dY/5)
 			# (dirX, dirY) = ("", "")
  
 			# ensure there is significant movement in the
