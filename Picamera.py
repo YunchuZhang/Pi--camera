@@ -32,7 +32,7 @@ counter = 0
 (dX, dY) = (0, 0)
 direction = ""
 #PID
-P = 
+
 
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
