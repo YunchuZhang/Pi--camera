@@ -139,15 +139,15 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 		# check to see if enough points have been accumulated in
 		# the buffer
-		if counter >= 4 and i == 1 and pts[-4] is not None:
+		if counter >= 3 and i == 1 and pts[-3] is not None:
 			# compute the difference between the x and y
 			# coordinates and re-initialize the direction
 			# text variables
-			for j in range(-4,i+1):
+			for j in range(-3,i+1):
 				dX += pts[j][0]
 				dY += pts[j][1]
-			dX = dX/6
-			dY = dY/6
+			dX = dX/5
+			dY = dY/5
 			# (dirX, dirY) = ("", "")
  
 			# ensure there is significant movement in the
@@ -171,6 +171,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
  
 		# otherwise, compute the thickness of the line and
 		# draw the connecting lines
+		print("Dx: %3f  Dy: %3f"%(dX,dY))
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
 		cv2.line(image, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
