@@ -16,7 +16,7 @@ import cv2
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video",
 	help="path to the (optional) video file")
-ap.add_argument("-b", "--buffer", type=int, default=64,
+ap.add_argument("-b", "--buffer", type=int, default=10,
 	help="max buffer size")
 args = vars(ap.parse_args())
 
