@@ -192,7 +192,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	Perr = 1 * (dX - setx)
 	#Read
 	dxl_goal_position = int (Perr * 0.9656 + 515) 
-	print(" Goal: " + dxl_goal_position)
+	print(" Goal: %d" % (dxl_goal_position))
 	if dxl_goal_position > 824:
 		dxl_goal_position = 824
 	elif dxl_goal_position < 206:
