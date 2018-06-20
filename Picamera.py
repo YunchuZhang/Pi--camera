@@ -189,15 +189,18 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		0.35, (0, 0, 255), 1)
 	#Motor
 	# PID
-	Perr = 1 * (dX - setx)
-	#Read
-	dxl_goal_position = int (Perr * 0.9656 + 515) 
-	print(" Goal: %d" % (dxl_goal_position))
-	if dxl_goal_position > 824:
-		dxl_goal_position = 824
-	elif dxl_goal_position < 206:
-		dxl_goal_position = 206
+	if counter >= 3:
 
+		Perr = 1 * (dX - setx)
+		#Read
+		dxl_goal_position = int (Perr * 0.9656 + 515) 
+		#print(" Goal: %d" % (dxl_goal_position))
+		if dxl_goal_position > 800:
+			dxl_goal_position = 800
+		elif dxl_goal_position < 184:
+			dxl_goal_position = 184
+	elif :
+		dxl_goal_position = 515 
 	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
