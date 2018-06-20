@@ -199,7 +199,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			dxl_goal_position = 800
 		elif dxl_goal_position < 184:
 			dxl_goal_position = 184
-	elif :
+	else :
 		dxl_goal_position = 515 
 	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
 	if dxl_comm_result != COMM_SUCCESS:
