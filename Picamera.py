@@ -28,7 +28,7 @@ args = vars(ap.parse_args())
 redLower = (138, 155, 125)
 redUpper = (175, 255, 255)
 pts = deque(maxlen=args["buffer"])
-
+counter = 0
 (dX, dY) = (0, 0)
 direction = ""
 #PID
