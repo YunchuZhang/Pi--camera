@@ -131,7 +131,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		if radius > 5:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
-			count + = 1
+			count += 1
 			cv2.circle(image, (int(x), int(y)), int(radius),
 				(0, 255, 255), 2)
 			cv2.circle(image, center, 5, (0, 0, 255), -1)
