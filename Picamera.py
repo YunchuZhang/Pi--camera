@@ -28,8 +28,7 @@ args = vars(ap.parse_args())
 redLower = (138, 155, 125)
 redUpper = (175, 255, 255)
 pts = deque(maxlen=args["buffer"])
-counter = 0
-count = 0
+
 (dX, dY) = (0, 0)
 direction = ""
 #PID
@@ -131,7 +130,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		if radius > 5:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
-			count += 1
+			
 			cv2.circle(image, (int(x), int(y)), int(radius),
 				(0, 255, 255), 2)
 			cv2.circle(image, center, 5, (0, 0, 255), -1)
@@ -191,7 +190,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		0.35, (0, 0, 255), 1)
 	#Motor
 	# PID
-	if count >= 3:
+	if dX !=0 and dY !=0:
 
 		Perr = 1 * (dX - setx)
 		#Read
