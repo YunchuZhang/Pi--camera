@@ -135,8 +135,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		M = cv2.moments(c)
 		z = (KNOWN_WIDTH * focalLength) / (2 * radius)
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
- 		posi = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]), int(z))
-		# only proceed if the radius meets a minimum size
+		posi = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]), int(z))
+ 		# only proceed if the radius meets a minimum size
 		if radius > 5:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
