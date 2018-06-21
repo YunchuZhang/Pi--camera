@@ -191,8 +191,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		# otherwise, compute the thickness of the line and
 		# draw the connecting lines
 		print("Dx: %3f  Dy: %3f Dz: %3f"%(dX,dY,dZ))
-		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
-		cv2.line(image, pts[i - 1], pts[i], (0, 0, 255), thickness)
+		#thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
+		#cv2.line(image, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
 	# show the movement deltas and the direction of movement on
 	# the frame
