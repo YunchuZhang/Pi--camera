@@ -24,7 +24,7 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
-focalLength = 320
+focalLength = 319
 KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
 redUpper = (175, 255, 255)
