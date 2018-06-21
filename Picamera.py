@@ -36,10 +36,10 @@ direction = ""
 #PID
 setx = 320
 P = 1
-I = 0.2
+I = 0
 D = 0
 lasterrx = 0
-iaccux = 400
+iaccux = 0
 nowerrx = 0
 out = 0
 # initialize the camera and grab a reference to the raw camera capture
