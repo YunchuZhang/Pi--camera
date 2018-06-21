@@ -24,14 +24,15 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
-
+focalLength = 320
+KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
 redUpper = (175, 255, 255)
 pts = deque(maxlen=args["buffer"])
 counter = 0
 clear = 0
 lock = 0
-(dX, dY) = (0, 0)
+(dX, dY, dZ) = (0, 0, 0)
 direction = ""
 #PID
 setx = 320
@@ -132,8 +133,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		c = max(cnts, key=cv2.contourArea)
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
+		z = (KNOWN_WIDTH * focalLength) / (2 * radius)
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
- 
+ 		posi = （int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]), int(z)）
 		# only proceed if the radius meets a minimum size
 		if radius > 5:
 			# draw the circle and centroid on the frame,
@@ -142,7 +144,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			cv2.circle(image, (int(x), int(y)), int(radius),
 				(0, 255, 255), 2)
 			cv2.circle(image, center, 5, (0, 0, 255), -1)
-			pts.appendleft(center)
+			
+			pts.appendleft(posi)
 
 	# loop over the set of tracked points
 	for i in range(1, len(pts)):
@@ -160,8 +163,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			for j in range(-3,i+1):
 				dX += pts[j][0]
 				dY += pts[j][1]
+				dZ += pts[j][2]
 			dX = int(dX/5)
 			dY = int(dY/5)
+			dZ = int(dZ/5)
 			# (dirX, dirY) = ("", "")
  
 			# ensure there is significant movement in the
@@ -185,7 +190,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
  
 		# otherwise, compute the thickness of the line and
 		# draw the connecting lines
-		print("Dx: %3f  Dy: %3f"%(dX,dY))
+		print("Dx: %3f  Dy: %3f Dz: %3f"%(dX,dY,dZ))
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
 		cv2.line(image, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
@@ -193,7 +198,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	# the frame
 	cv2.putText(image, direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
 		0.65, (0, 0, 255), 3)
-	cv2.putText(image, "dx: {}, dy: {}".format(dX, dY),
+	cv2.putText(image, "dx: {}, dy: {}, dz:{}".format(dX, dY, dZ),
 		(10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
 		0.35, (0, 0, 255), 1)
 	#Motor
