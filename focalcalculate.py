@@ -9,8 +9,8 @@ import argparse
 import imutils
 import time
 import cv2
-KNOWN_DISTANCE = 24.0
-KNOWN_WIDTH = 11.0
+KNOWN_DISTANCE = 200.0
+KNOWN_WIDTH = 38.5
 def distance_to_camera(knownWidth, focalLength, perWidth):
 	# compute and return the distance from the maker to the camera
 	return (knownWidth * focalLength) / perWidth
@@ -22,7 +22,7 @@ camera = PiCamera()
 camera.resolution = (640, 480)
 camera.framerate = 45
 rawCapture = PiRGBArray(camera, size=(640, 480))
-image = cv2.imread('')
+image = cv2.imread('/home/pi/Track/image1.jpg')
 blurred = cv2.GaussianBlur(image, (11, 11), 0)
 hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
  
@@ -51,17 +51,17 @@ if len(cnts) > 0:
  
 	# only proceed if the radius meets a minimum size
 	if radius > 5:
-		# draw the circle and centroid on the frame,
+	    # draw the circle and centroid on the frame,
 		# then update the list of tracked points
 			
-		cv2.circle(image, (int(x), int(y)）, int(radius),(0, 255, 255), 2)
+		cv2.circle(image, (int(x), int(y)), int(radius),(0, 255, 255), 2)
 		cv2.circle(image, center, 5, (0, 0, 255), -1)
 		focalLength = (2 * radius * KNOWN_DISTANCE) / KNOWN_WIDTH
 		print(" The radius is %f focalLength is %f" %(radius,focalLength))
 		cv2.putText(image, "focalLength: {}".format(focalLength),
 		(10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
 		0.35, (0, 0, 255), 1)
-
-
-
+while 1:
+    cv2.imshow("Frame" , image)
+    cv2.waitKey(0)
 cv2.destroyAllWindows()
