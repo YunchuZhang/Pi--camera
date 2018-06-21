@@ -36,8 +36,8 @@ direction = ""
 #PID
 setx = 320
 P = 1
-I = 0.1
-D = 1
+I = 0.2
+D = 0
 lasterrx = 0
 iaccux = 400
 nowerrx = 0
@@ -202,10 +202,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	nowerrx = dX - setx
 	iaccux += nowerrx
 	out = P * nowerrx + I * iaccux + D * (nowerrx - lasterrx)
-
-
-
 	lasterrx = nowerrx
+
+
+	
 
 
 	if dX !=0 and dY !=0:
@@ -233,12 +233,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			
 	else :
 		dxl_goal_position = 515 
-	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
-	if dxl_comm_result != COMM_SUCCESS:
-		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-	elif dxl_error != 0:
-		print("%s" % packetHandler.getRxPacketError(dxl_error))
-		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
+
 	# if abs(dxl_goal_position - dxl_present_position) > 3:
 	#Image feedback	
 	# Write
@@ -254,6 +249,12 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	elif dxl_error != 0:
 		print("%s" % packetHandler.getRxPacketError(dxl_error))
 
+	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
+	if dxl_comm_result != COMM_SUCCESS:
+		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+	elif dxl_error != 0:
+		print("%s" % packetHandler.getRxPacketError(dxl_error))
+		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
 
 	
 
