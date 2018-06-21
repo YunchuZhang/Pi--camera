@@ -200,7 +200,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
 	# PID
 	if dX !=0 and dY !=0:
-		out = dX * 0.9656 + 206
+		out =int(dX * 0.9656 + 206)
 		# if abs(dxl_present_position -out) < 3:
 			
 			
