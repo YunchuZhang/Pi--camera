@@ -36,6 +36,11 @@ direction = ""
 #PID
 setx = 320
 P = 1
+I = 0.1
+D = 1
+lasterrx = 0
+iaccux = 400
+nowerrx = 0
 out = 0
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
@@ -194,25 +199,33 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	#Motor
 
 	# PID
+	nowerrx = dX - setx
+	iaccux += nowerrx
+	out = P * nowerrx + I * iaccux + D * (nowerrx - lasterrx)
+
+
+
+	lasterrx = nowerrx
+
+
 	if dX !=0 and dY !=0:
-		out =int(dX * 0.9656 + 206)
-		# if abs(dxl_present_position -out) < 3:
+		# if abs(dX -setx) < 3:
+		# 	lock = out
 			
-			
-		# 	dxl_goal_position = out
+		# 	dxl_goal_position = lock
 		# 	clear = 0
 			
 			
 
 		# elif abs(dX -setx) > 3 and clear == 0:
 
-		# 	# Perr = P * (dX - setx)
-		# 	# #Read
-		# 	# out = int (Perr * 0.9656 + 515)
-		# 	out = dX * 0.9656 + 206
+		# 	Perr = P * (dX - setx)
+		# 	#Read
+		# 	out = int (Perr * 0.9656 + 515)
+
 		dxl_goal_position = out 
-		# 	clear = 1 
-		# 	#print(" Goal: %d" % (dxl_goal_position))
+			
+			#print(" Goal: %d" % (dxl_goal_position))
 		if dxl_goal_position > 800:
 			dxl_goal_position = 800
 		elif dxl_goal_position < 230:
@@ -220,7 +233,12 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			
 	else :
 		dxl_goal_position = 515 
-
+	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
+	if dxl_comm_result != COMM_SUCCESS:
+		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+	elif dxl_error != 0:
+		print("%s" % packetHandler.getRxPacketError(dxl_error))
+		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
 	# if abs(dxl_goal_position - dxl_present_position) > 3:
 	#Image feedback	
 	# Write
@@ -228,12 +246,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		#206 515 824
 		# -320 ~320 
 		#P = P * (dX * 0.9656 + 206 - dxl_present_position)
-	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
-	if dxl_comm_result != COMM_SUCCESS:
-		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-	elif dxl_error != 0:
-		print("%s" % packetHandler.getRxPacketError(dxl_error))
-		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
+
 		
 	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, dxl_goal_position)
 	if dxl_comm_result != COMM_SUCCESS:
