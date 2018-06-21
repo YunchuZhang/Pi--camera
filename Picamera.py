@@ -192,25 +192,32 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		(10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
 		0.35, (0, 0, 255), 1)
 	#Motor
+	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
+	if dxl_comm_result != COMM_SUCCESS:
+		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+	elif dxl_error != 0:
+		print("%s" % packetHandler.getRxPacketError(dxl_error))
+		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
 	# PID
 	if dX !=0 and dY !=0:
-		if abs(dX -setx) < 3:
-			lock = out
+		out = dX * 0.9656 + 206
+		# if abs(dxl_present_position -out) < 3:
 			
-			dxl_goal_position = lock
-			clear = 0
+			
+		# 	dxl_goal_position = out
+		# 	clear = 0
 			
 			
 
-		elif abs(dX -setx) > 3 and clear == 0:
+		# elif abs(dX -setx) > 3 and clear == 0:
 
-			Perr = P * (dX - setx)
-			#Read
-			out = int (Perr * 0.9656 + 515)
-			
-			dxl_goal_position = out 
-			clear = 1 
-			#print(" Goal: %d" % (dxl_goal_position))
+		# 	# Perr = P * (dX - setx)
+		# 	# #Read
+		# 	# out = int (Perr * 0.9656 + 515)
+		# 	out = dX * 0.9656 + 206
+		dxl_goal_position = out 
+		# 	clear = 1 
+		# 	#print(" Goal: %d" % (dxl_goal_position))
 		if dxl_goal_position > 800:
 			dxl_goal_position = 800
 		elif dxl_goal_position < 230:
@@ -218,12 +225,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			
 	else :
 		dxl_goal_position = 515 
-	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
-	if dxl_comm_result != COMM_SUCCESS:
-		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-	elif dxl_error != 0:
-		print("%s" % packetHandler.getRxPacketError(dxl_error))
-		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
+
 	# if abs(dxl_goal_position - dxl_present_position) > 3:
 	#Image feedback	
 	# Write
