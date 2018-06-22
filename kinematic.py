@@ -20,3 +20,4 @@ def goalpos(theta1,theta2,theta3,theta4):
 	trans_mat = np.dot(trans_mat,t3)
 	trans_mat = np.dot(trans_mat,t4)
 	return trans_mat
+#print(np.dot(goalpos(0,0,0,0),[[189],[34],[-81],[1]]))
