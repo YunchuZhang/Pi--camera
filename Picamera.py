@@ -218,7 +218,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		print(dxl_present_position)
 
 	# write angle
-	goalpos(theta[0],theta[1],theta[2],theta[3])
+	#goalpos(theta[0],theta[1],theta[2],theta[3])
 
 
 	# PID
