@@ -1,7 +1,7 @@
 import numpy as np
 import math
 PI = np.pi
-trans_mat = np.eye(4)
+#trans_mat = np.eye(4)
 #end effect -51
 def tmatrix (a,alpha,theta,d):
 	temp = np.array([[np.cos(theta), -np.sin(theta)*np.cos(alpha), np.sin(theta)*np.sin(alpha), a*np.cos(theta)],
