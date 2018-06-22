@@ -171,10 +171,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 				dX += pts[j][0]
 				dY += pts[j][1]
 				dZ += pts[j][2]
-			
-			dX = int(KNOWN_WIDTH * focalLength) /((dX/5)-320)
-			dY = int(KNOWN_WIDTH * focalLength) /((dY/5)-240)
 			dZ = int(dZ/5)
+			dX = int((dZ *(dX/5)-320)/focalLength)
+			dY = int((dZ *(dY/5)-320)/focalLength)
+			
+			
 
 			# (dirX, dirY) = ("", "")
  
