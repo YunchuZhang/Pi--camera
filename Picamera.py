@@ -10,6 +10,7 @@ import imutils
 import time
 import cv2
 from kinematic import *
+import kinematic
 trans = np.eye(4)
 ttrans_mat = np.eye(4)
 # from kinematic import goalpos
