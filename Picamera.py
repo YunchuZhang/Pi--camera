@@ -9,6 +9,8 @@ import argparse
 import imutils
 import time
 import cv2
+from kinematic import *
+# from kinematic import goalpos
 # HSV parameters
 # Hmin 138 Smin 155 Vmin 125
 # Hmax 175 Smax 255 Vmax 255
@@ -24,6 +26,7 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
+theta = [0,0,0,0]
 focalLength = 319
 KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
@@ -51,7 +54,7 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 
 
 # Init Goal position
-dxl_goal =515 
+dxl_goal =512 
 
 
 # Initialize PortHandler instance
@@ -84,18 +87,19 @@ else:
     quit()
 
 # Enable Dynamixel Torque
-dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, DXL_ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
-if dxl_comm_result != COMM_SUCCESS:
-    print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-elif dxl_error != 0:
-    print("%s" % packetHandler.getRxPacketError(dxl_error))
-else:
-    print("Dynamixel has been successfully connected")
-dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, dxl_goal)
-if dxl_comm_result != COMM_SUCCESS:
-	print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-elif dxl_error != 0:
-	print("%s" % packetHandler.getRxPacketError(dxl_error))
+for ID in range(11,15):
+	dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
+	if dxl_comm_result != COMM_SUCCESS:
+    	print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+	elif dxl_error != 0:
+    	print("%s" % packetHandler.getRxPacketError(dxl_error))
+	else:
+    	print("Dynamixel has been successfully connected")
+	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, dxl_goal)
+	if dxl_comm_result != COMM_SUCCESS:
+		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+	elif dxl_error != 0:
+		print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 # allow the camera or video file to warm up
 time.sleep(0.2)
@@ -201,43 +205,57 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	cv2.putText(image, "dx: {}, dy: {}, dz:{}".format(dX, dY, dZ),
 		(10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
 		0.35, (0, 0, 255), 1)
+
 	#Motor
+	# read angle make trasform
+	for ID in range(11,15):
+		dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, ID, ADDR_PRO_PRESENT_POSITION)
+		if dxl_comm_result != COMM_SUCCESS:
+			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+		elif dxl_error != 0:
+			print("%s" % packetHandler.getRxPacketError(dxl_error))
+		theta[ID-11] = dxl_present_position
+		print(dxl_present_position)
+
+	# write angle
+	goalpos(theta[0],theta[1],theta[2],theta[3])
+
 
 	# PID
-	nowerrx = dX - setx
-	iaccux += nowerrx
-	out = P * nowerrx + I * iaccux + D * (nowerrx - lasterrx)
-	lasterrx = nowerrx
+	# nowerrx = dX - setx
+	# iaccux += nowerrx
+	# out = P * nowerrx + I * iaccux + D * (nowerrx - lasterrx)
+	# lasterrx = nowerrx
 
 
 	
 
 
-	if dX !=0 and dY !=0:
-		# if abs(dX -setx) < 3:
-		# 	lock = out
+	# if dX !=0 and dY !=0:
+	# 	# if abs(dX -setx) < 3:
+	# 	# 	lock = out
 			
-		# 	dxl_goal_position = lock
-		# 	clear = 0
+	# 	# 	dxl_goal_position = lock
+	# 	# 	clear = 0
 			
 			
 
-		# elif abs(dX -setx) > 3 and clear == 0:
+	# 	# elif abs(dX -setx) > 3 and clear == 0:
 
-		# 	Perr = P * (dX - setx)
-		# 	#Read
-		# 	out = int (Perr * 0.9656 + 515)
+	# 	# 	Perr = P * (dX - setx)
+	# 	# 	#Read
+	# 	# 	out = int (Perr * 0.9656 + 515)
 
-		dxl_goal_position = int (out) 
+	# 	dxl_goal_position = int (out) 
 			
-			#print(" Goal: %d" % (dxl_goal_position))
-		if dxl_goal_position > 800:
-			dxl_goal_position = 800
-		elif dxl_goal_position < 230:
-			dxl_goal_position = 230
+	# 		#print(" Goal: %d" % (dxl_goal_position))
+	# 	if dxl_goal_position > 800:
+	# 		dxl_goal_position = 800
+	# 	elif dxl_goal_position < 230:
+	# 		dxl_goal_position = 230
 			
-	else :
-		dxl_goal_position = 515 
+	# else :
+	# 	dxl_goal_position = 515 
 
 	# if abs(dxl_goal_position - dxl_present_position) > 3:
 	#Image feedback	
@@ -247,19 +265,16 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		# -320 ~320 
 		#P = P * (dX * 0.9656 + 206 - dxl_present_position)
 
-		
-	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, dxl_goal_position)
+	#0 ~512 ~1024
+	#-90 ~0 ~ 90
+	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, dxl_goal_position=530)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
 		print("%s" % packetHandler.getRxPacketError(dxl_error))
 
-	dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_POSITION)
-	if dxl_comm_result != COMM_SUCCESS:
-		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-	elif dxl_error != 0:
-		print("%s" % packetHandler.getRxPacketError(dxl_error))
-		print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
+
+	print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
 
 	
 
@@ -278,12 +293,14 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 # close all windows
 cv2.destroyAllWindows()
 
+
 # Disable Dynamixel Torque
-dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, DXL_ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_DISABLE)
-if dxl_comm_result != COMM_SUCCESS:
-    print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-elif dxl_error != 0:
-    print("%s" % packetHandler.getRxPacketError(dxl_error))
+for ID in range(11,15):
+	dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_DISABLE)
+	if dxl_comm_result != COMM_SUCCESS:
+    	print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+	elif dxl_error != 0:
+    	print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 # Close port
 portHandler.closePort()
