@@ -10,6 +10,7 @@ import imutils
 import time
 import cv2
 from kinematic import *
+trans = np.eye(4)
 # from kinematic import goalpos
 # HSV parameters
 # Hmin 138 Smin 155 Vmin 125
@@ -219,7 +220,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		print(dxl_present_position)
 
 	# write angle
-	#goalpos(theta[0],theta[1],theta[2],theta[3])
+	trans = goalpos(theta[0],theta[1],theta[2],theta[3])
 
 
 	# PID
