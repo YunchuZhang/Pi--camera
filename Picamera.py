@@ -282,7 +282,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	#0 ~512 ~1024
 	#-90 ~0 ~ 90
-	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, 530)
+	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, 512)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
