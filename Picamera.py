@@ -171,9 +171,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 				dX += pts[j][0]
 				dY += pts[j][1]
 				dZ += pts[j][2]
-			dX = int(dX/5)
-			dY = int(dY/5)
+			
+			dX = int(KNOWN_WIDTH * focalLength) /((dX/5)-320)
+			dY = int(KNOWN_WIDTH * focalLength) /((dY/5)-240)
 			dZ = int(dZ/5)
+
 			# (dirX, dirY) = ("", "")
  
 			# ensure there is significant movement in the
@@ -193,14 +195,17 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			# # otherwise, only one direction is non-empty
 			# else:
 			# 	direction = dirX if dirX != "" else dirY
-
- 
 		# otherwise, compute the thickness of the line and
 		# draw the connecting lines
-		print("Dx: %3f  Dy: %3f Dz: %3f"%(dX,dY,dZ))
+
+		# z = -x   y = y x = z
+	print("Dx: %3f  Dy: %3f Dz: %3f"%(dX,dY,dZ))
 		#thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
 		#cv2.line(image, pts[i - 1], pts[i], (0, 0, 255), thickness)
-
+	z0 = -dX
+	y0 = dY
+	x0 = dZ
+	print("Dx0: %3f  Dy0: %3f Dz0: %3f"%(x0,y0,z0))
 	# show the movement deltas and the direction of movement on
 	# the frame
 	cv2.putText(image, direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
@@ -221,7 +226,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		print(dxl_present_position)
 
 	# write angle
-	trans = goalpos(theta[0],theta[1],theta[2],theta[3])
+	position0 = [[x0],[y0],[z0],[1]]
+	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
+	print(trans)
 
 
 	# PID
