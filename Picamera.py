@@ -175,7 +175,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			dX = int(dX/5)
 			dY = int(dY/5)
 			print("Dx: %3f  Dy: %3f Dz: %3f"%(dX,dY,dZ))
-			dZ = int(dZ/5)
+			
 			dX = int((dZ *dX-320)/focalLength)
 			dY = int((dZ *dY-320)/focalLength)
 			
@@ -204,7 +204,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		# draw the connecting lines
 
 		# z = -x   y = y x = z
-	print("Dx: %3f  Dy: %3f Dz: %3f"%(dX,dY,dZ))
+	print("Dxt: %3f  Dyt: %3f Dzt: %3f"%(dX,dY,dZ))
 		#thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
 		#cv2.line(image, pts[i - 1], pts[i], (0, 0, 255), thickness)
 	z0 = -dX
