@@ -299,9 +299,9 @@ cv2.destroyAllWindows()
 for ID in range(11,15):
 	dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_DISABLE)
 	if dxl_comm_result != COMM_SUCCESS:
-    	print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
-    	print("%s" % packetHandler.getRxPacketError(dxl_error))
+		print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 # Close port
 portHandler.closePort()
