@@ -29,6 +29,7 @@ args = vars(ap.parse_args())
 # ball in the HSV color space, then initialize the
 # list of tracked points
 theta = [0,0,0,0]
+position0 = [0,0,0,0]
 focalLength = 319
 KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
