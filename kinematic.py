@@ -10,10 +10,9 @@ def tmatrix (a,alpha,theta,d):
 	[0, 0, 0, 1]])
 	return temp
 def goalpos(theta1,theta2,theta3,theta4):
-	trans_mat = np.eye(4)
 	t1 = tmatrix(0,-PI * 0.5,theta1,51)
-	t2 = tmatrix(129,0,PI/4-theta2,0)
-	t3 = tmatrix(65,0,(5/36)*PI-theta3,0)
+	t2 = tmatrix(129,0,-PI/4+theta2,0)
+	t3 = tmatrix(65,0,(5/36)*PI+theta3,0)
 	t4 = tmatrix(45,0,PI/2+theta4,0)
 	trans_mat = np.dot(trans_mat,t1)
 	trans_mat = np.dot(trans_mat,t2)
