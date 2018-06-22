@@ -1,3 +1,3 @@
 from kinematic import *
-trans = np.dot(goalpos(0,0,0,0),[[189],[34],[-81],[1]])
+trans = np.dot(goalpos(0,0,0,0),[[0],[0],[0],[1]])
 print(trans)
