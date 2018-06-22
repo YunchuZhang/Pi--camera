@@ -106,12 +106,9 @@ for ID in range(11,15):
 
 # allow the camera or video file to warm up
 time.sleep(0.2)
-trans = np.dot(goalpos(0,0,0,0),[[189],[34],[-81],[1]])
-print(trans)
 # capture frames from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 	# grab the raw NumPy array representing the image, then initialize the timestamp
-
 	# and occupied/unoccupied text
 	image = frame.array
 
