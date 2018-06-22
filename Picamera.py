@@ -268,14 +268,14 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	#0 ~512 ~1024
 	#-90 ~0 ~ 90
-	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, dxl_goal_position=530)
+	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, 530)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
 		print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 
-	print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
+	#print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
 
 	
 
