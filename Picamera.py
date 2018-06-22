@@ -29,7 +29,6 @@ args = vars(ap.parse_args())
 # ball in the HSV color space, then initialize the
 # list of tracked points
 theta = [0,0,0,0]
-position0 = [0,0,0,0]
 focalLength = 319
 KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
@@ -110,6 +109,8 @@ time.sleep(0.2)
 # capture frames from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 	# grab the raw NumPy array representing the image, then initialize the timestamp
+	trans = np.dot(goalpos(0,0,0,0),[[189],[34],[-81],[1]])
+	print(trans)
 	# and occupied/unoccupied text
 	image = frame.array
 
@@ -233,10 +234,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	# write angle
 	position0 = [[x0],[y0],[z0],[1]]
-	zzz = np.dot(goalpos(0,0,0,0),[[189],[34],[-81],[1]])
-	trans = np.dot(goalpos(0,0,0,0),[[189],[34],[-81],[1]])
+	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(trans)
-	print(zzz)
 
 
 	# PID
