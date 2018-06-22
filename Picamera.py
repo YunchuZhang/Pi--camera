@@ -176,8 +176,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			dY = int(dY/5)
 			print("Dx: %3f  Dy: %3f Dz: %3f"%(dX,dY,dZ))
 			
-			dX = int((dZ *dX-320)/focalLength)
-			dY = int((dZ *dY-320)/focalLength)
+			dX = int((dZ *(dX-320))/focalLength)
+			dY = int((dZ *(dY-240))/focalLength)
 			
 			
 
