@@ -11,6 +11,7 @@ import time
 import cv2
 from kinematic import *
 trans = np.eye(4)
+ttrans_mat = np.eye(4)
 # from kinematic import goalpos
 # HSV parameters
 # Hmin 138 Smin 155 Vmin 125
