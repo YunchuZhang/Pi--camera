@@ -38,7 +38,7 @@ redUpper = (175, 255, 255)
 pts = deque(maxlen=args["buffer"])
 counter = 0
 clear = 0
-lock = 0
+begin = 0
 (dX, dY, dZ) = (0, 0, 0)
 direction = ""
 #PID
@@ -180,7 +180,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			
 			dX = int((dZ *(dX-320))/focalLength)
 			dY = int((dZ *(dY-240))/focalLength)
-			
+			begin = 1
 			
 
 			# (dirX, dirY) = ("", "")
@@ -229,7 +229,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 		elif dxl_error != 0:
 			print("%s" % packetHandler.getRxPacketError(dxl_error))
-		theta[ID-11] = (dxl_present_position / 5.688 - 90) / PI * 180 
+		if begin == 1:
+			theta[ID-11] = (dxl_present_position / 5.688 - 90) / PI * 180 
+		else :
+			theta[ID-11] = 0
 		print(dxl_present_position)
 
 	# write angle
@@ -305,7 +308,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	for i in range(0,4):
 		settheta[i] = int (settheta[i] * 5.688 + 512)
 	for ID in range(11,15):
-		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
+		if begin == 1:
+			dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
+		else :
+			dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, 512)	
 		if dxl_comm_result != COMM_SUCCESS:
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 		elif dxl_error != 0:
