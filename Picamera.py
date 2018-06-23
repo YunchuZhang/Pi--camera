@@ -291,12 +291,14 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	n = basepoint[0]**2 basepoint[1]**2
 	m = basepoint[2] - 65
 	settheta[2] = np.arccos((-m**2 - n**2 + 129*129 + 65*65)/(2*129*65))
-	settheta[2] = 180 - int (settheta[2]*180/PI+70)
+	settheta[2] = 180 - int (settheta[2]*180/PI) - 37
 	belta = np.arctan2(m,n)
 	fi = np.arccos((m**2 + n**2 + 129*129 - 65*65)/(2*129 * np.sqrt(n**2 +m**2)))
-	settheta[1] = int ((belta - fi)*180/PI)
-	settheta[3] = 90 - settheta[1] -settheta[2]
-	or ID in range(11,15):
+	settheta[1] = int ((belta - fi)*180/PI) + 70
+	settheta[3] = 90 - settheta[1] -settheta[2] - 90
+	for i in range(0,4):
+		settheta[i] = int (settheta[i] * 5.688 + 512)
+	for ID in range(11,15):
 		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
 		if dxl_comm_result != COMM_SUCCESS:
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
