@@ -40,6 +40,7 @@ counter = 0
 clear = 0
 begin = 0
 (dX, dY, dZ) = (0, 0, 0)
+(x0,y0,z0) = (0,0,0)
 direction = ""
 #PID
 setx = 320
@@ -225,15 +226,17 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	# read angle make trasform
 	for ID in range(11,15):
 		dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, ID, ADDR_PRO_PRESENT_POSITION)
-		if dxl_comm_result != COMM_SUCCESS:
-			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-		elif dxl_error != 0:
-			print("%s" % packetHandler.getRxPacketError(dxl_error))
-		if begin == 1 and dxl_present_position !=0 :
+
+
+		if begin == 1 and dxl_present_position != 0 :
 			theta[ID-11] = (dxl_present_position / 5.688 - 90) / PI * 180 
 		else :
 			theta[ID-11] = 0
 		print(dxl_present_position)
+		if dxl_comm_result != COMM_SUCCESS:
+			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+		elif dxl_error != 0:
+			print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 	# write angle
 	position0 = [[x0],[y0],[z0],[1]]
