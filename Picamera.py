@@ -229,7 +229,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 		elif dxl_error != 0:
 			print("%s" % packetHandler.getRxPacketError(dxl_error))
-		theta[ID-11] = dxl_present_position
+		theta[ID-11] = (dxl_present_position / 5.688 - 90) / PI * 180 
 		print(dxl_present_position)
 
 	# write angle
