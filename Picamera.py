@@ -295,11 +295,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	print(- m**2 - n**2 + 129*129 + 65*65)
 	print(2*129*65)
 	print(np.arccos((- m**2 - n**2 + 129*129 + 65*65)/(2*129*65)))
-	settheta[2] = np.arccos(((- m**2 - n**2 + 129*129 + 65*65)/(2*129*65))
-
+	settheta[2] = np.arccos(((- m**2 - n**2 + 129*129 + 65*65)/(2*129*65)))
 	settheta[2] = 180 - int (settheta[2]*180/PI) - 37
 	belta = np.arctan2(m,n)
-	fi = np.arccos(((m**2 + n**2 + 129*129 - 65*65)/(2*129 * np.sqrt(n**2 +m**2)))
+	fi = np.arccos(((m**2 + n**2 + 129*129 - 65*65)/(2*129 * np.sqrt(n**2 +m**2))))
 	settheta[1] = int ((belta - fi)*180/PI) + 70
 	settheta[3] = 90 - settheta[1] -settheta[2] - 90
 	for i in range(0,4):
