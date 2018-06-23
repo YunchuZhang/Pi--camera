@@ -29,6 +29,8 @@ args = vars(ap.parse_args())
 # ball in the HSV color space, then initialize the
 # list of tracked points
 theta = [0,0,0,0]
+basepoint = [0,0,0]
+settheta = [0,0,0,0]
 focalLength = 319
 KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
@@ -89,7 +91,7 @@ else:
     quit()
 
 # Enable Dynamixel Torque
-for ID in range(1,15):
+for ID in range(11,15):
 	dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -282,11 +284,24 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	#0 ~512 ~1024
 	#-90 ~0 ~ 90
-	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, 512)
-	if dxl_comm_result != COMM_SUCCESS:
-		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-	elif dxl_error != 0:
-		print("%s" % packetHandler.getRxPacketError(dxl_error))
+	# IK
+	basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+	settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+	settheta[0] = int (settheta[0]*180/PI)
+	n = basepoint[0]**2 basepoint[1]**2
+	m = basepoint[2] - 65
+	settheta[2] = np.arccos((-m**2 - n**2 + 129*129 + 65*65)/(2*129*65))
+	settheta[2] = 180 - int (settheta[2]*180/PI+70)
+	belta = np.arctan2(m,n)
+	fi = np.arccos((m**2 + n**2 + 129*129 - 65*65)/(2*129 * np.sqrt(n**2 +m**2)))
+	settheta[1] = int ((belta - fi)*180/PI)
+	settheta[3] = 90 - settheta[1] -settheta[2]
+	or ID in range(11,15):
+		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
+		if dxl_comm_result != COMM_SUCCESS:
+			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+		elif dxl_error != 0:
+			print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 
 	#print("[ID:%03d] GoalPos:%03d  PresPos:%03d" % (DXL_ID, dxl_goal_position, dxl_present_position))
