@@ -229,7 +229,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 		elif dxl_error != 0:
 			print("%s" % packetHandler.getRxPacketError(dxl_error))
-		if begin == 1:
+		if begin == 1 and dxl_present_position !=0 :
 			theta[ID-11] = (dxl_present_position / 5.688 - 90) / PI * 180 
 		else :
 			theta[ID-11] = 0
