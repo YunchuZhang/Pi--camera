@@ -290,6 +290,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	settheta[0] = int (settheta[0]*180/PI)
 	n = basepoint[0]**2 + basepoint[1]**2
 	m = basepoint[2] - 65
+	n = np.sqrt(n)
 	print(m)
 	print(n)
 	print(- m**2 - n**2 + 129*129 + 65*65)
