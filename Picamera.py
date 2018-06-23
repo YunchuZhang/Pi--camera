@@ -317,6 +317,12 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			settheta[i] = 0
 	for i in range(0,4):
 		settheta[i] = int (settheta[i] * 5.688 + 512)
+		if settheta[i] >= 1024:
+			settheta[i] = 1024
+		if settheta[i] <= 0:
+			settheta[i] = 0
+	if settheta[3] >= 520:
+		settheta[3] = 512
 	for ID in range(11,15):
 		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
 		print(settheta[ID-11])
