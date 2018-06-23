@@ -233,7 +233,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		print(dxl_present_position)
 
 	# write angle
-	position0 = [[x0],[y0],[z0],[1]]
+	position0 = [[50],[0],[50],[1]]
 	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(trans)
 
