@@ -230,10 +230,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 		if begin == 1 and dxl_present_position != 0 :
 			theta[ID-11] = (dxl_present_position / 5.688 - 90) / PI * 180 
-			print(theta[ID-11])
 		else :
 			theta[ID-11] = 0
-			print(theta[ID-11])
 		print(dxl_present_position)
 		if dxl_comm_result != COMM_SUCCESS:
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -241,7 +239,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 	# write angle
-	position0 = [[x0],[y0],[z0],[1]]
+	if begin == 1 and (theta[0]+theta[1]+theta[2]+theta[3]) != 0 :
+		position0 = [[x0],[y0],[z0],[1]]
+	else :
+		position0 = [[0],[0],[0],[1]]
 	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(trans)
 
