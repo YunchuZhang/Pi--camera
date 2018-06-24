@@ -298,19 +298,24 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		basepoint =[trans[0][0],trans[1][0],trans[2][0]]
 		settheta[0] = np.arctan2(basepoint[1], basepoint[0])
 		settheta[0] = int (settheta[0]*180/PI)
+		a = 129
+		b = np.sqrt(65**2 + 83**2)
 		n = basepoint[0]**2 + basepoint[1]**2
 		m = basepoint[2] - 65
 		n = np.sqrt(n)
+		t1 = np.arccos((a**2 + b**2 - n**2 - m**2)/(2*a*b))
+		t2 = np.arctan2(83,65)
 		print(m)
 		print(n)
-		print(- m**2 - n**2 + 129*129 + 65*65)
-		print(2*129*65)
-		print(np.arccos((- m**2 - n**2 + 129*129 + 65*65)/(2*129*65)))
-		settheta[2] = np.arccos(((- m**2 - n**2 + 129*129 + 65*65)/(2*129*65)))
+		print(t1)
+		print(t2)
+
+		settheta[2] = t1 + t2
 		settheta[2] = 180 - int (settheta[2]*180/PI) - 37
+
 		belta = np.arctan2(m,n)
-		fi = np.arccos(((m**2 + n**2 + 129*129 - 65*65)/(2*129 * np.sqrt(n**2 +m**2))))
-		settheta[1] = int ((belta - fi)*180/PI) + 70
+		fi = np.arccos((a**2 + m**2 + n**2 - b**2)/(2*a*np.sqrt(m**2 + n**2)))
+		settheta[1] = 90 - int ((belta + fi)*180/PI) + 70
 		settheta[3] = 90 - settheta[1] -settheta[2] - 90
 	else :
 		for i in range(0,4):
