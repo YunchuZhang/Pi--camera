@@ -229,7 +229,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 
 		if begin == 1 and dxl_present_position != 0 :
-			theta[ID-11] = (dxl_present_position / 5.688 - 90) / PI * 180 
+			theta[ID-11] = (dxl_present_position / 5.688 - 90) * PI / 180 
 		else :
 			theta[ID-11] = 0
 		print(dxl_present_position)
@@ -317,7 +317,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		fi = np.arccos((a**2 + m**2 + n**2 - b**2)/(2*a*np.sqrt(m**2 + n**2)))
 		print(belta)
 		print(fi)
-		settheta[1] = 90 - int ((belta + fi)*180/PI) -18
+		settheta[1] = 90 - int ((belta + fi)*180/PI) -20
 		settheta[3] = 90 - settheta[1] -settheta[2] - 90
 	else :
 		for i in range(0,4):
@@ -331,7 +331,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	if settheta[3] >= 520:
 		settheta[3] = 512
 	for ID in range(11,15):
-		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
+		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, 512)
 		print(settheta[ID-11])
 		if dxl_comm_result != COMM_SUCCESS:
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
