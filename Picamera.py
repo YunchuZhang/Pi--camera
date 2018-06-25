@@ -317,7 +317,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		fi = np.arccos((a**2 + m**2 + n**2 - b**2)/(2*a*np.sqrt(m**2 + n**2)))
 		print(belta)
 		print(fi)
-		settheta[1] = 90 - int ((belta + fi)*180/PI) - 70
+		settheta[1] = 90 - int ((belta + fi)*180/PI) 
 		settheta[3] = 90 - settheta[1] -settheta[2] - 90
 	else :
 		for i in range(0,4):
