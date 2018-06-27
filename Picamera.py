@@ -283,8 +283,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		print("aaaaa")
 
 		position0[0][0] = position0[0][0] - 20
-		position0[0][1] = position0[1][0] + 20
-		position0[0][2] = position0[2][0] - 20
+		position0[1][0] = position0[1][0] + 20
+		position0[2][0] = position0[2][0] - 20
 		trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 		print(trans)
 		basepoint =[trans[0][0],trans[1][0],trans[2][0]]
@@ -301,8 +301,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		if math.isnan(t1):
 			print("bbbbb")
 			position0[0][0] = position0[0][0] - 20
-			position0[0][1] = position0[1][0] + 20
-			position0[0][2] = position0[2][0] - 20
+			position0[1][0] = position0[1][0] + 20
+			position0[2][0] = position0[2][0] - 20
 			trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 			print(trans)
 
@@ -320,8 +320,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			if math.isnan(t1):
 				print("ccccc")
 				position0[0][0] = position0[0][0] - 20
-				position0[0][1] = position0[1][0] + 20
-				position0[0][2] = position0[2][0] - 20
+				position0[1][0] = position0[1][0] + 20
+				position0[2][0] = position0[2][0] - 20
 				trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 				print(trans)
 
