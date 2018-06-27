@@ -184,28 +184,6 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			begin = 1
 			
 
-			# (dirX, dirY) = ("", "")
- 
-			# ensure there is significant movement in the
-			# x-direction
-			# if np.abs(dX) > 20:
-			# 	dirX = "East" if np.sign(dX) == 1 else "West"
- 
-			# # ensure there is significant movement in the
-			# # y-direction
-			# if np.abs(dY) > 20:
-			# 	dirY = "North" if np.sign(dY) == 1 else "South"
- 
-			# # handle when both directions are non-empty
-			# if dirX != "" and dirY != "":
-			# 	direction = "{}-{}".format(dirY, dirX)
- 
-			# # otherwise, only one direction is non-empty
-			# else:
-			# 	direction = dirX if dirX != "" else dirY
-		# otherwise, compute the thickness of the line and
-		# draw the connecting lines
-
 		# z = -x   y = y x = z
 	print("Dxt: %3f  Dyt: %3f Dzt: %3f"%(dX,dY,dZ))
 		#thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
@@ -240,22 +218,18 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	# write angle
 	if begin == 1 and (theta[0]+theta[1]+theta[2]+theta[3]) != 0 :
-		position0 = [[x0 - 150],[y0],[z0],[1]]
+		position0 = [[x0],[y0],[z0],[1]]
 	else :
-		position0 = [[0],[0],[0],[1]]
+		position0 = [[100],[0],[0],[1]]
+	position0[0][0] = position0[0][0] - 100
 	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(trans)
-
 
 	# PID
 	# nowerrx = dX - setx
 	# iaccux += nowerrx
 	# out = P * nowerrx + I * iaccux + D * (nowerrx - lasterrx)
 	# lasterrx = nowerrx
-
-
-	
-
 
 	# if dX !=0 and dY !=0:
 	# 	# if abs(dX -setx) < 3:
@@ -294,34 +268,101 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	#0 ~512 ~1024
 	#-90 ~0 ~ 90
 	# IK
-	if begin == 1:
+	basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+	settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+	settheta[0] = int (settheta[0]*180/PI)
+
+	n = basepoint[0]**2 + basepoint[1]**2
+	m = basepoint[2] - 65	
+	n = np.sqrt(n)
+	a = np.sqrt(m**2 + n**2)
+
+	x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+	temp = np.arccos((129**2-106**2+a**2)/(2*129*a))
+	if math.isnan(temp):
+		print("aaaaa")
+
+		position0[0][0] = position0[0][0] - 20
+		position0[0][1] = position0[0][1] + 20
+		position0[0][2] = position0[0][2] - 20
+		trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
+		print(trans)
 		basepoint =[trans[0][0],trans[1][0],trans[2][0]]
 		settheta[0] = np.arctan2(basepoint[1], basepoint[0])
 		settheta[0] = int (settheta[0]*180/PI)
-		a = 129
-		b = np.sqrt(65**2 + 83**2)
+
 		n = basepoint[0]**2 + basepoint[1]**2
-		m = basepoint[2] - 65
+		m = basepoint[2] - 65	
 		n = np.sqrt(n)
-		t1 = np.arccos((a**2 + b**2 - n**2 - m**2)/(2*a*b))
-		t2 = np.arctan2(83,65)
-		print(m)
-		print(n)
-		print(t1)
-		print(t2)
+		a = np.sqrt(m**2 + n**2)
 
-		settheta[2] = t1 + t2
-		settheta[2] = 180 - int (settheta[2]*180/PI) - 37
+		x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+		t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
+		if math.isnan(t1):
+			print("bbbbb")
+			position0[0][0] = position0[0][0] - 20
+			position0[0][1] = position0[0][1] + 20
+			position0[0][2] = position0[0][2] - 20
+			trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
+			print(trans)
 
-		belta = np.arctan2(m,n)
-		fi = np.arccos((a**2 + m**2 + n**2 - b**2)/(2*a*np.sqrt(m**2 + n**2)))
-		print(belta)
-		print(fi)
-		settheta[1] = 90 - int ((belta + fi)*180/PI) -20
-		settheta[3] = 90 - settheta[1] -settheta[2] - 90
-	else :
-		for i in range(0,4):
-			settheta[i] = 0
+			basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+			settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+			settheta[0] = int (settheta[0]*180/PI)
+
+			n = basepoint[0]**2 + basepoint[1]**2
+			m = basepoint[2] - 65	
+			n = np.sqrt(n)
+			a = np.sqrt(m**2 + n**2)
+
+			x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+			t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
+			if math.isnan(t1):
+				print("ccccc")
+				position0[0][0] = position0[0][0] - 20
+				position0[0][1] = position0[0][1] + 20
+				position0[0][2] = position0[0][2] - 20
+				trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
+				print(trans)
+
+				basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+				settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+				settheta[0] = int (settheta[0]*180/PI)
+
+				n = basepoint[0]**2 + basepoint[1]**2
+				m = basepoint[2] - 65	
+				n = np.sqrt(n)
+				a = np.sqrt(m**2 + n**2)
+
+				x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+				t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
+			else:
+				pass
+		else:
+			pass
+	else:
+		t1 = temp
+	t2 = np.arctan2(m,n)
+	print(m)
+	print(n)
+	print(x)
+
+	print(t1)
+	print(t2)
+
+
+	settheta[1] = 90 - int ((t2 + t1)*180/PI) - 45
+
+
+	belta = np.arccos((129**2 - a**2 + x**2)/(2*129*x))
+	fi = np.arccos((65**2 - 83**2 + x**2)/(2*65*x))
+	print(belta)
+	print(fi)
+	settheta[2] = 180 - int ((belta + fi)*180/PI) -37
+	settheta[3] = -(180 - int ((belta + fi)*180/PI) + 90 - int ((t2 + t1)*180/PI))
+	print(settheta)
+	
+
 	for i in range(0,4):
 		settheta[i] = int (settheta[i] * 5.688 + 512)
 		if settheta[i] >= 1024:
