@@ -14,7 +14,7 @@ def goalpos(theta1,theta2,theta3,theta4):
 	t1 = tmatrix(0,-PI * 0.5,theta1,65)
 	t2 = tmatrix(129,0,-PI*(70/180.0)+theta2,0)
 	t3 = tmatrix(65,0,(37/180.0)*PI+theta3,0)
-	t4 = tmatrix(83,0,PI/2.0+theta4,0)
+	t4 = tmatrix(83,0,PI/4.0+theta4,0)
 	trans_mat = np.dot(trans_mat,t1)
 	trans_mat = np.dot(trans_mat,t2)
 	trans_mat = np.dot(trans_mat,t3)
