@@ -220,10 +220,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		# check to see if enough points have been accumulated in
 		# the buffer
 
-		if i == 1 and ps[-2] is not None:
-			xa = ps[-2][0] - ps[i][0]
-			ya = ps[-2][1] - ps[i][1]
-			za = ps[-2][2] - ps[i][2]
+		if i == 1 and ps[-1] is not None:
+			xa = ps[-1][0] - ps[i][0]
+			ya = ps[-1][1] - ps[i][1]
+			za = ps[-1][2] - ps[i][2]
 			print("hsssss")
 			print(xa,ya,za)
 			if np.abs(xa) < 20 and np.abs(ya) < 20 and np.abs(za) < 20:
@@ -419,11 +419,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		if savetheta[i - 1] is None or savetheta[i] is None:
 			continue
 
-		if clear == 1 and i == 1 and savetheta[-2] is not None:
-			settheta[0] = savetheta[-2][0] 
-			settheta[1] = savetheta[-2][1] 
-			settheta[2] = savetheta[-2][2] 
-			settheta[3] = savetheta[-2][3]
+		if clear == 1 and i == 1 and savetheta[-1] is not None:
+			settheta[0] = savetheta[-1][0] 
+			settheta[1] = savetheta[-1][1] 
+			settheta[2] = savetheta[-1][2] 
+			settheta[3] = savetheta[-1][3]
 			print(savetheta[-2][0])
 			print(savetheta[-2][1])
 	for ID in range(11,15):
