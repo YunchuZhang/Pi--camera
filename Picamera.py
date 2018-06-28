@@ -36,11 +36,14 @@ KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
 redUpper = (175, 255, 255)
 pts = deque(maxlen=args["buffer"])
+ps = deque(maxlen=args["buffer"])
+savetheta = deque(maxlen=args["buffer"])
 counter = 0
 clear = 0
 begin = 0
 (dX, dY, dZ) = (0, 0, 0)
 (x0,y0,z0) = (0,0,0)
+(xa,ya,za) = (0,0,0)
 direction = ""
 #PID
 setx = 320
@@ -206,6 +209,25 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	y0 = dY
 	x0 = dZ
 	print("Dx0: %3f  Dy0: %3f Dz0: %3f"%(x0,y0,z0))
+	pss = (x0,y0,z0)
+	ps.appendleft(pss)
+	for i in range(1, len(ps)):
+		# if either of the tracked points are None, ignore
+		# them
+		if ps[i - 1] is None or ps[i] is None:
+			continue
+
+		# check to see if enough points have been accumulated in
+		# the buffer
+
+		if counter >= 3 and i == 1 and ps[-3] is not None:
+			xa = ps[-3][0] - ps[i][0]
+			ya = ps[-3][1] - ps[i][1]
+			za = ps[-3][2] - ps[i][2]
+			if np.abs(xa) < 20 and np.abs(ya) < 20 and np.abs(za) < 20:
+				clear = 1
+			else:
+				clear = 0
 	# show the movement deltas and the direction of movement on
 	# the frame
 	cv2.putText(image, direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
@@ -380,12 +402,26 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	for i in range(0,4):
 		settheta[i] = int (settheta[i] * 5.688 + 512)
-		if settheta[i] >= 924:
-			settheta[i] = 924
+		if settheta[i] >= 904:
+			settheta[i] = 904
 		if settheta[i] <= 100:
 			settheta[i] = 100
 	if settheta[3] >= 520:
 		settheta[3] = 512
+
+
+	savetheta.appendleft(settheta)
+	for i in range(1, len(savetheta)):
+		# if either of the tracked points are None, ignore
+		# them
+		if savetheta[i - 1] is None or savetheta[i] is None:
+			continue
+
+		if clear == 1 and i == 1 and savetheta[-3] is not None:
+			settheta[0] = savetheta[-3][0] 
+			settheta[1] = savetheta[-3][1] 
+			settheta[2] = savetheta[-3][2] 
+			settheta[3] = savetheta[-3][3]
 	for ID in range(11,15):
 		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
 		print(settheta[ID-11])
@@ -401,7 +437,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 
 	# show the frame to our screen
-	#cv2.imshow("Frame", image)
+	cv2.imshow("Frame", image)
 	key = cv2.waitKey(1) & 0xFF
 	counter+=1
         # clear the stream in preparation for the next frame
