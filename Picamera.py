@@ -62,7 +62,7 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 
 
 # Init Goal position
-dxl_goal =512 
+dxl_goal =[512,489,506,341] 
 
 
 # Initialize PortHandler instance
@@ -112,7 +112,7 @@ for ID in range(11,15):
 	else:
 		print("Dynamixel has been successfully connected")
 
-	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, dxl_goal)
+	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, dxl_goal[ID-11])
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
