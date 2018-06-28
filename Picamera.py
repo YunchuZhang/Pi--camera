@@ -101,7 +101,21 @@ for ID in range(11,15):
 	else:
 		print("Dynamixel has been successfully connected")
 
+	dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, ID, ADDR_PRO_P_GAIN, 20)
+	if dxl_comm_result != COMM_SUCCESS:
+		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+	elif dxl_error != 0:
+		print("%s" % packetHandler.getRxPacketError(dxl_error))
+	else:
+		print("Dynamixel has been successfully connected")
+
 	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, dxl_goal)
+	if dxl_comm_result != COMM_SUCCESS:
+		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+	elif dxl_error != 0:
+		print("%s" % packetHandler.getRxPacketError(dxl_error))
+
+	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_MOVE_SPEED , 100)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
@@ -360,7 +374,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	print(belta)
 	print(fi)
 	settheta[2] = 180 - int ((belta + fi)*180/PI) -47
-	settheta[3] = -settheta[1]-settheta[2]-35
+	settheta[3] =  -settheta[1]-settheta[2]-35
 	print(settheta)
 
 

@@ -21,11 +21,13 @@ else:
 ADDR_PRO_TORQUE_ENABLE      = 24              # Control table address is different in Dynamixel model
 ADDR_PRO_GOAL_POSITION      = 30
 ADDR_PRO_PRESENT_POSITION   = 37
-
+ADDR_PRO_MOVE_SPEED         = 32
+ADDR_PRO_P_GAIN             = 29
 # Protocol version
 PROTOCOL_VERSION            = 2.0               # See which protocol version is used in the Dynamixel
 
 # Default setting
+# 11-15
 DXL_ID                      = 11                 # Dynamixel ID : 1
 BAUDRATE                    = 1000000             # Dynamixel default baudrate : 57600
 DEVICENAME                  = '/dev/ttyUSB0'    # Check which port is being used on your controller
