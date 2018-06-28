@@ -352,24 +352,24 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	print(t2)
 
 
-	settheta[1] = 90 - int ((t2 + t1)*180/PI) - 45
+	settheta[1] = 90 - int ((t2 + t1)*180/PI) - 38
 
 
 	belta = np.arccos((129**2 - a**2 + x**2)/(2*129*x))
 	fi = np.arccos((65**2 - 83**2 + x**2)/(2*65*x))
 	print(belta)
 	print(fi)
-	settheta[2] = 180 - int ((belta + fi)*180/PI) -37
-	settheta[3] = -(180 - int ((belta + fi)*180/PI) + 90 - int ((t2 + t1)*180/PI))
+	settheta[2] = 180 - int ((belta + fi)*180/PI) -47
+	settheta[3] = -settheta[1]-settheta[2]-35
 	print(settheta)
 
 
 	for i in range(0,4):
 		settheta[i] = int (settheta[i] * 5.688 + 512)
-		if settheta[i] >= 1024:
-			settheta[i] = 1024
-		if settheta[i] <= 0:
-			settheta[i] = 0
+		if settheta[i] >= 924:
+			settheta[i] = 924
+		if settheta[i] <= 100:
+			settheta[i] = 100
 	if settheta[3] >= 520:
 		settheta[3] = 512
 	for ID in range(11,15):
