@@ -258,8 +258,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	if begin == 1 and (theta[0]+theta[1]+theta[2]+theta[3]) != 0 :
 		position0 = [[x0],[y0],[z0],[1]]
 	else :
-		position0 = [[100],[0],[0],[1]]
-	position0[0][0] = position0[0][0] - 100
+		position0 = [[80],[0],[0],[1]]
+	position0[0][0] = position0[0][0] - 80
 	print(position0)
 	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(trans)
