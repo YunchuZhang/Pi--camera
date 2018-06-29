@@ -175,6 +175,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			pts.appendleft(posi)
 
 	# loop over the set of tracked points
+	print(pts)
 	for i in range(1, len(pts)):
 		# if either of the tracked points are None, ignore
 		# them
