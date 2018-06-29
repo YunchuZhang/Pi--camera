@@ -226,7 +226,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			za = ps[-1][2] - ps[i][2]
 			print("hsssss")
 			print(xa,ya,za)
-			if np.abs(xa) < 100 and np.abs(ya) < 100 and np.abs(za) < 100:
+			if np.abs(xa) == 0 and np.abs(ya) == 0 and np.abs(za) == 0:
+				clear = 0
+			elif np.abs(xa) < 100 and np.abs(ya) < 100 and np.abs(za) < 100:
 				clear = 1
 			else:
 				clear = 0
