@@ -452,7 +452,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		settheta[1] = savetheta1[1][1] 
 		settheta[2] = savetheta1[1][2] 
 		settheta[3] = savetheta1[1][3]
-	elif s != stop:
+	if s != stop:
 		s = 0
 		stop = 0
 		
