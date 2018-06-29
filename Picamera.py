@@ -104,7 +104,7 @@ for ID in range(11,15):
 	else:
 		print("Dynamixel has been successfully connected")
 
-	dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, ID, ADDR_PRO_P_GAIN, 20)
+	dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, ID, ADDR_PRO_P_GAIN, 33)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
@@ -426,10 +426,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			settheta[1] = savetheta[1][1] 
 			settheta[2] = savetheta[1][2] 
 			settheta[3] = savetheta[1][3]
-			print(savetheta[1][0])
-			print(savetheta[0][0])
-			print(savetheta[1][1])
-			print(savetheta[0][1])
+			print(savetheta[1][0],savetheta[1][1],savetheta[1][2],savetheta[1][3])
+			print(savetheta[0][0],savetheta[0][1],savetheta[0][2],savetheta[0][3])
+
 	for ID in range(11,15):
 		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
 		print(settheta[ID-11])
