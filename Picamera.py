@@ -422,12 +422,14 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			continue
 
 		if clear == 1 and i == 1 and savetheta[-1] is not None:
-			settheta[0] = savetheta[-1][0] 
-			settheta[1] = savetheta[-1][1] 
-			settheta[2] = savetheta[-1][2] 
-			settheta[3] = savetheta[-1][3]
-			print(savetheta[-2][0])
-			print(savetheta[-2][1])
+			settheta[0] = savetheta[1][0] 
+			settheta[1] = savetheta[1][1] 
+			settheta[2] = savetheta[1][2] 
+			settheta[3] = savetheta[1][3]
+			print(savetheta[1][0])
+			print(savetheta[0][0])
+			print(savetheta[1][1])
+			print(savetheta[0][1])
 	for ID in range(11,15):
 		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
 		print(settheta[ID-11])
