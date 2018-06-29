@@ -415,8 +415,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		settheta[3] = 512
 	print("askaskjdasd")
 	print(settheta)
-
-	savetheta.appendleft(settheta)
+	savet = (settheta[0],settheta[1],settheta[2],settheta[3])
+	savetheta.appendleft(savet)
 	print(savetheta)
 	for i in range(1, len(savetheta)):
 		# if either of the tracked points are None, ignore
