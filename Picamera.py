@@ -40,7 +40,7 @@ redLower = (138, 155, 125)
 redUpper = (175, 255, 255)
 pts = deque(maxlen=args["buffer"])
 ps = deque(maxlen=3)
-savetheta = deque(maxlen=3)
+savetheta = deque(maxlen=2)
 savetheta1 = deque(maxlen=3)
 counter = 0
 clear = 0
