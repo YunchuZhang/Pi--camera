@@ -222,9 +222,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		# the buffer
 
 		if i == 1 and ps[-1] is not None:
-			xa = ps[-4][0] - ps[i][0]
-			ya = ps[-4][1] - ps[i][1]
-			za = ps[-4][2] - ps[i][2]
+			xa = ps[5][0] - ps[i][0]
+			ya = ps[5][1] - ps[i][1]
+			za = ps[5][2] - ps[i][2]
 			print("hsssss")
 			print(xa,ya,za)
 			if np.abs(xa) == 0 and np.abs(ya) == 0 and np.abs(za) == 0:
@@ -425,10 +425,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			continue
 
 		if clear == 1 and i == 1 and savetheta[-1] is not None:
-			settheta[0] = savetheta[-4][0] 
-			settheta[1] = savetheta[-4][1] 
-			settheta[2] = savetheta[-4][2] 
-			settheta[3] = savetheta[-4][3]
+			settheta[0] = savetheta[5][0] 
+			settheta[1] = savetheta[5][1] 
+			settheta[2] = savetheta[5][2] 
+			settheta[3] = savetheta[5][3]
 			print(savetheta[-1][0],savetheta[-1][1],savetheta[-1][2],savetheta[-1][3])
 			print(savetheta[0][0],savetheta[0][1],savetheta[0][2],savetheta[0][3])
 			print(savetheta[1][0],savetheta[1][1],savetheta[1][2],savetheta[1][3])
