@@ -28,9 +28,12 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
+savet = (0,0,0,0)
+savet1 = (0,0,0,0)
 theta = [0,0,0,0]
 basepoint = [0,0,0]
 settheta = [0,0,0,0]
+settheta0 = [0,0,0,0]
 focalLength = 319
 KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
@@ -38,9 +41,12 @@ redUpper = (175, 255, 255)
 pts = deque(maxlen=args["buffer"])
 ps = deque(maxlen=3)
 savetheta = deque(maxlen=3)
+savetheta1 = deque(maxlen=3)
 counter = 0
 clear = 0
 begin = 0
+stop = 0
+s = -1
 (dX, dY, dZ) = (0, 0, 0)
 (x0,y0,z0) = (0,0,0)
 (xa,ya,za) = (0,0,0)
@@ -210,8 +216,13 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	y0 = dY
 	x0 = dZ
 	print("Dx0: %3f  Dy0: %3f Dz0: %3f"%(x0,y0,z0))
+	if x0 != 0 and y0 != 0 and z0 != 0:
+		s = s + 1
+
 	pss = (x0,y0,z0)
+
 	ps.appendleft(pss)
+	print(ps)
 	for i in range(1, len(ps)):
 		# if either of the tracked points are None, ignore
 		# them
@@ -229,10 +240,16 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			print(xa,ya,za)
 			if np.abs(xa) == 0 and np.abs(ya) == 0 and np.abs(za) == 0:
 				clear = 0
+				
 			elif np.abs(xa) < 100 and np.abs(ya) < 100 and np.abs(za) < 100:
 				clear = 1
+				stop = stop + 1
+				
+				
 			else:
 				clear = 0
+				
+				
 	# show the movement deltas and the direction of movement on
 	# the frame
 	cv2.putText(image, direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
@@ -418,21 +435,29 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	savet = (settheta[0],settheta[1],settheta[2],settheta[3])
 	savetheta.appendleft(savet)
 	print(savetheta)
-	for i in range(1, len(savetheta)):
-		# if either of the tracked points are None, ignore
-		# them
-		if savetheta[i - 1] is None or savetheta[i] is None:
-			continue
 
-		if clear == 1 and i == 1 and savetheta[-1] is not None:
-			settheta[0] = savetheta[-1][0] 
-			settheta[1] = savetheta[-1][1] 
-			settheta[2] = savetheta[-1][2] 
-			settheta[3] = savetheta[-1][3]
-			print(savetheta[-1][0],savetheta[-1][1],savetheta[-1][2],savetheta[-1][3])
-			print(savetheta[0][0],savetheta[0][1],savetheta[0][2],savetheta[0][3])
-			print(savetheta[1][0],savetheta[1][1],savetheta[1][2],savetheta[1][3])
-			print(savetheta[-2][0],savetheta[-2][1],savetheta[-2][2],savetheta[-2][3])
+
+	if clear == 1 and savetheta[-1] is not None:
+		settheta0[0] = savetheta[-1][0] 
+		settheta0[1] = savetheta[-1][1] 
+		settheta0[2] = savetheta[-1][2] 
+		settheta0[3] = savetheta[-1][3]
+		
+	
+		savet1 = (settheta0[0],settheta0[1],settheta0[2],settheta0[3])
+		savetheta1.appendleft(savet1)
+
+	if s == stop:
+		settheta[0] = savetheta1[1][0] 
+		settheta[1] = savetheta1[1][1] 
+		settheta[2] = savetheta1[1][2] 
+		settheta[3] = savetheta1[1][3]
+	elif s != stop:
+		s = 0
+		stop = 0
+		
+
+
 
 	for ID in range(11,15):
 		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
