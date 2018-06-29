@@ -413,7 +413,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			settheta[i] = 100
 	if settheta[3] >= 520:
 		settheta[3] = 512
-
+	print("askaskjdasd")
+	print(settheta)
 
 	savetheta.appendleft(settheta)
 	print(savetheta)
