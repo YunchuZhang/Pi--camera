@@ -441,8 +441,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		settheta[1] = savetheta[-2][1] 
 		settheta[2] = savetheta[-2][2] 
 		settheta[3] = savetheta[-2][3]
-
-
+	savet = (settheta[0],settheta[1],settheta[2],settheta[3])
+	savetheta.appendleft(savet)
 	# if clear == 1 and savetheta[-1] is not None:
 	# 	settheta0[0] = savetheta[-1][0] 
 	# 	settheta0[1] = savetheta[-1][1] 
