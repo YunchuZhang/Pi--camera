@@ -415,6 +415,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 
 	savetheta.appendleft(settheta)
+	print(savetheta)
 	for i in range(1, len(savetheta)):
 		# if either of the tracked points are None, ignore
 		# them
