@@ -36,8 +36,8 @@ KNOWN_WIDTH = 38.5
 redLower = (138, 155, 125)
 redUpper = (175, 255, 255)
 pts = deque(maxlen=args["buffer"])
-ps = deque(maxlen=4)
-savetheta = deque(maxlen=4)
+ps = deque(maxlen=3)
+savetheta = deque(maxlen=3)
 counter = 0
 clear = 0
 begin = 0
