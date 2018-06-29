@@ -432,7 +432,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		settheta[3] = 512
 	print("askaskjdasd")
 	print(settheta)
-
+	savet = (settheta[0],settheta[1],settheta[2],settheta[3])
 	print(s,stop)
 	if clear == 1 and savetheta[-1] is not None:
 		settheta[0] = savetheta[-1][0] 
