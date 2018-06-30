@@ -396,7 +396,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 				x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
 				t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
 			else:
-				trans = np.dot(goalpos(0,0,0,0),[[0],[0],[0],[1]]])
+				trans = np.dot(goalpos(0,0,0,0),[[0],[0],[0],[1]])
 				print(trans)
 
 				basepoint =[trans[0][0],trans[1][0],trans[2][0]]
