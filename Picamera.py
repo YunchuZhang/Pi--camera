@@ -396,7 +396,20 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 				x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
 				t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
 			else:
-				pass
+				trans = np.dot(goalpos(0,0,0,0),[[0],[0],[0],[1]]])
+				print(trans)
+
+				basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+				settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+				settheta[0] = int (settheta[0]*180/PI)
+
+				n = basepoint[0]**2 + basepoint[1]**2
+				m = basepoint[2] - 65	
+				n = np.sqrt(n)
+				a = np.sqrt(m**2 + n**2)
+
+				x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+				t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
 		else:
 			pass
 	else:
@@ -445,7 +458,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	savet = (settheta[0],settheta[1],settheta[2],settheta[3])
 	savetheta.appendleft(savet)
 	print(savetheta)
-	print(savetheta[-1][0] ,savetheta[-1][1] ,savetheta[0][0] ,savetheta[0][1] ,savetheta[-2][0] ,savetheta[-2][1] )
+	#print(savetheta[-1][0] ,savetheta[-1][1] ,savetheta[0][0] ,savetheta[0][1] ,savetheta[-2][0] ,savetheta[-2][1] )
 	# if clear == 1 and savetheta[-1] is not None:
 	# 	settheta0[0] = savetheta[-1][0] 
 	# 	settheta0[1] = savetheta[-1][1] 
