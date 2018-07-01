@@ -170,7 +170,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 		posi = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]), int(z))
  		# only proceed if the radius meets a minimum size
-		if radius > 6:
+		if radius > 4:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
 			
@@ -194,13 +194,13 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			# compute the difference between the x and y
 			# coordinates and re-initialize the direction
 			# text variables
-			for j in range(-3,i+1):
+			for j in range(-3,i):
 				dX += pts[j][0]
 				dY += pts[j][1]
 				dZ += pts[j][2]
-			dZ = int(dZ/5)
-			dX = int(dX/5)
-			dY = int(dY/5)
+			dZ = int(dZ/4)
+			dX = int(dX/4)
+			dY = int(dY/4)
 			print("Dx: %3f  Dy: %3f Dz: %3f"%(dX,dY,dZ))
 			
 			dX = int((dZ *(dX-320))/focalLength)
