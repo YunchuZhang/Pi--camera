@@ -241,7 +241,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			if np.abs(xa) == 0 and np.abs(ya) == 0 and np.abs(za) == 0 and begin != 1:
 				clear = 0
 				
-			elif np.abs(xa) < 70 and np.abs(ya) < 70 and np.abs(za) < 50:
+			elif np.abs(xa) < 50 and np.abs(ya) < 50 and np.abs(za) < 40:
 				clear = 1
 				stop = stop + 1
 				
@@ -278,8 +278,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	if begin == 1 and (theta[0]+theta[1]+theta[2]+theta[3]) != 0 :
 		position0 = [[x0],[y0],[z0],[1]]
 	else :
-		position0 = [[140],[0],[0],[1]]
-	position0[0][0] = position0[0][0] - 140
+		position0 = [[90],[0],[0],[1]]
+	position0[0][0] = position0[0][0] - 90
 	print(position0)
 	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(trans)
