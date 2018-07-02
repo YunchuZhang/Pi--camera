@@ -241,7 +241,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			if np.abs(xa) == 0 and np.abs(ya) == 0 and np.abs(za) == 0 and begin != 1:
 				clear = 0
 				
-			elif np.abs(xa) < 50 and np.abs(ya) < 50 and np.abs(za) < 40:
+			elif np.abs(xa) < 40 and np.abs(ya) < 40 and np.abs(za) < 50:
 				clear = 1
 				stop = stop + 1
 				
@@ -504,7 +504,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	# show the frame to our screen
 	cv2.imshow("Frame", image)
-	key = cv2.waitKey(1200) & 0xFF
+	key = cv2.waitKey(500) & 0xFF
 	counter+=1
         # clear the stream in preparation for the next frame
 	rawCapture.truncate(0)
