@@ -504,7 +504,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	# show the frame to our screen
 	cv2.imshow("Frame", image)
-	key = cv2.waitKey(500) & 0xFF
+	key = cv2.waitKey(800) & 0xFF
 	counter+=1
         # clear the stream in preparation for the next frame
 	rawCapture.truncate(0)
