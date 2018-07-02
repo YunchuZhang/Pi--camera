@@ -124,7 +124,7 @@ for ID in range(11,15):
 	elif dxl_error != 0:
 		print("%s" % packetHandler.getRxPacketError(dxl_error))
 
-	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_MOVE_SPEED , 270)
+	dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_MOVE_SPEED , 180)
 	if dxl_comm_result != COMM_SUCCESS:
 		print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 	elif dxl_error != 0:
@@ -504,7 +504,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	# show the frame to our screen
 	cv2.imshow("Frame", image)
-	key = cv2.waitKey(100) & 0xFF
+	key = cv2.waitKey(120) & 0xFF
 	counter+=1
         # clear the stream in preparation for the next frame
 	rawCapture.truncate(0)
