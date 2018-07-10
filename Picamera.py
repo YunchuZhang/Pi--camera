@@ -10,6 +10,13 @@ import imutils
 import time
 import cv2
 from kinematic import *
+from kinematic1 import *
+
+from core import *
+import numpy as ny
+from kinematic1 import *
+
+
 trans = np.eye(4)
 ttrans_mat = np.eye(4)
 # from kinematic import goalpos
@@ -68,7 +75,7 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 
 
 # Init Goal position
-dxl_goal =[512,489,506,341] 
+dxl_goal =[512,160,873,339] 
 
 
 # Initialize PortHandler instance
@@ -133,9 +140,21 @@ for ID in range(11,15):
 # allow the camera or video file to warm up
 time.sleep(0.2)
 # capture frames from the camera
+
+
+arm = Actuator(['z',[129.0,0.,0.], 'z',[65.0,0.,0.],'z',[83.0,0.,0.]])
+arm.angles =[-PI*(156/180.0),(99/180.0)*PI,(61/180.0)*PI]
+
+
+
+
+
+
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 	# grab the raw NumPy array representing the image, then initialize the timestamp
 	# and occupied/unoccupied text
+
+	start = time.time()
 	image = frame.array
 
 
@@ -281,9 +300,33 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		position0 = [[90],[0],[0],[1]]
 	position0[0][0] = position0[0][0] - 90
 	print(position0)
-	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
+	theta[1] = theta[1] - (94/180.0)*PI + PI*(156/180.0)
+	theta[2] = theta[2] + (38/180.0)*PI - (99/180.0)*PI
+	theta[3] = theta[3] + 0.5*PI - (61/180.0)*PI
+	trans = np.dot(goalpos1(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(trans)
 
+
+
+	print(arm.ee)
+
+
+	basepoint =np.array([trans[0][0],trans[1][0],trans[2][0]])
+	settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+	settheta[0] = int (settheta[0]*180/PI)
+
+	arm.angles =[-PI*(156/180.0)+theta[1],(99/180.0)*PI+theta[2],(61/180.0)*PI+theta[3]]
+	print(arm.ee)
+	#arm.ee = []
+	arm.ee=[basepoint[0],65-basepoint[2],basepoint[1]]
+	(settheta[1],settheta[2],settheta[3]) = np.round(np.rad2deg(arm.angles))
+	print(np.round(np.rad2deg(arm.angles)))
+
+	settheta[1] = settheta[1]+ 4 + 90
+	settheta[2] = settheta[2] - 38
+	settheta[3] = settheta[3] - 90
+	print(settheta)
+	print(arm.ee)
 	# PID
 	# nowerrx = dX - setx
 	# iaccux += nowerrx
@@ -327,117 +370,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	#0 ~512 ~1024
 	#-90 ~0 ~ 90
 	# IK
-	basepoint =[trans[0][0],trans[1][0],trans[2][0]]
-	settheta[0] = np.arctan2(basepoint[1], basepoint[0])
-	settheta[0] = int (settheta[0]*180/PI)
 
-	n = basepoint[0]**2 + basepoint[1]**2
-	m = basepoint[2] - 65	
-	n = np.sqrt(n)
-	a = np.sqrt(m**2 + n**2)
-
-	x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
-	temp = np.arccos((129**2-106**2+a**2)/(2*129*a))
-	if math.isnan(temp):
-		print("aaaaa")
-
-		position0[0][0] = position0[0][0] - 20
-		position0[1][0] = position0[1][0] + 20
-		position0[2][0] = position0[2][0] - 20
-		trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
-		print(trans)
-		basepoint =[trans[0][0],trans[1][0],trans[2][0]]
-		settheta[0] = np.arctan2(basepoint[1], basepoint[0])
-		settheta[0] = int (settheta[0]*180/PI)
-
-		n = basepoint[0]**2 + basepoint[1]**2
-		m = basepoint[2] - 65	
-		n = np.sqrt(n)
-		a = np.sqrt(m**2 + n**2)
-
-		x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
-		t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
-		if math.isnan(t1):
-			print("bbbbb")
-			position0[0][0] = position0[0][0] - 20
-			position0[1][0] = position0[1][0] + 20
-			position0[2][0] = position0[2][0] - 20
-			trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
-			print(trans)
-
-			basepoint =[trans[0][0],trans[1][0],trans[2][0]]
-			settheta[0] = np.arctan2(basepoint[1], basepoint[0])
-			settheta[0] = int (settheta[0]*180/PI)
-
-			n = basepoint[0]**2 + basepoint[1]**2
-			m = basepoint[2] - 65	
-			n = np.sqrt(n)
-			a = np.sqrt(m**2 + n**2)
-
-			x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
-			t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
-			if math.isnan(t1):
-				print("ccccc")
-				position0[0][0] = position0[0][0] - 20
-				position0[1][0] = position0[1][0] + 20
-				position0[2][0] = position0[2][0] - 20
-				trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
-				print(trans)
-
-				basepoint =[trans[0][0],trans[1][0],trans[2][0]]
-				settheta[0] = np.arctan2(basepoint[1], basepoint[0])
-				settheta[0] = int (settheta[0]*180/PI)
-
-				n = basepoint[0]**2 + basepoint[1]**2
-				m = basepoint[2] - 65	
-				n = np.sqrt(n)
-				a = np.sqrt(m**2 + n**2)
-
-				x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
-				t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
-				if math.isnan(t1):
-					print("last")
-					trans = np.dot(goalpos(0,0,0,0),[[0],[0],[0],[1]])
-					print(trans)
-
-					basepoint =[trans[0][0],trans[1][0],trans[2][0]]
-					settheta[0] = np.arctan2(basepoint[1], basepoint[0])
-					settheta[0] = int (settheta[0]*180/PI)
-
-					n = basepoint[0]**2 + basepoint[1]**2
-					m = basepoint[2] - 65	
-					n = np.sqrt(n)
-					a = np.sqrt(m**2 + n**2)
-
-					x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
-					t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
-				else:
-					pass
-			else:
-				pass
-		else:
-			pass
-	else:
-		t1 = temp
-	t2 = np.arctan2(m,n)
-	print(m)
-	print(n)
-	print(x)
-
-	print(t1)
-	print(t2)
-
-
-	settheta[1] = 90 - int ((t2 + t1)*180/PI) - 38
-
-
-	belta = np.arccos((129**2 - a**2 + x**2)/(2*129*x))
-	fi = np.arccos((65**2 - 83**2 + x**2)/(2*65*x))
-	print(belta)
-	print(fi)
-	settheta[2] = 180 - int ((belta + fi)*180/PI) -47
-	settheta[3] =  -settheta[1]-settheta[2]-35
-	print(settheta)
 
 
 	for i in range(0,4):
@@ -489,7 +422,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 
 	for ID in range(11,15):
-		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, settheta[ID-11])
+		dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, ID, ADDR_PRO_GOAL_POSITION, dxl_goal[ID-11])
 		print(settheta[ID-11])
 		if dxl_comm_result != COMM_SUCCESS:
 			print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -508,6 +441,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	counter+=1
         # clear the stream in preparation for the next frame
 	rawCapture.truncate(0)
+	elapsed = (time.time() -start)
+	print(elapsed)
 	
 	# if the 'q' key is pressed, stop the loop
 	if key == ord("q"):
