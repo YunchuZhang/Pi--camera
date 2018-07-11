@@ -301,7 +301,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		position0 = [[90],[0],[0],[1]]
 	position0[0][0] = position0[0][0] - 90
 	print(position0)
-	theta[1] = theta[1] - (105/180.0)*PI + PI*(178/180.0)
+	theta[1] = theta[1] - (75/180.0)*PI + PI*(178/180.0)
 	theta[2] = theta[2] + (30/180.0)*PI - (135/180.0)*PI
 	theta[3] = theta[3] + 0.5*PI - (39/180.0)*PI
 	trans = np.dot(goalpos1(theta[0],theta[1],theta[2],theta[3]),position0)
@@ -346,8 +346,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	print(settheta)
 
-	if settheta[2] >= 83:
-		settheta[2] = 83
+	if settheta[2] > 103:
+		settheta[2] = 103
 		# s2 = 180 - 42 - 63
 		# s1 = 90 - settheta[1] - 20 - t2
 		settheta[1] = settheta[1] + 20
@@ -355,11 +355,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		# x2 = np.arccos((a**2 + x1**2 - 129**2)/(2*a*x1))
 		# x3 = np.arccos((x1**2 + 83**2 - 65**2)/(2*83*x1))
 		for i in range(-140,5,2):
-			theta1[0] = settheta[1] - (105/180.0)*PI + PI*(178/180.0)
+			theta1[0] = settheta[1] - (75/180.0)*PI + PI*(178/180.0)
 			theta1[1] = settheta[2] + (30/180.0)*PI - (135/180.0)*PI
 			#theta[3] = settheta[3] + 0.5*PI - (61/180.0)*PI
 			#print(i)
-			tran2 = np.dot(goalpos1(0,theta1[0],theta1[1],i),[[100],[0],[0],[1]])
+			tran2 = np.dot(goalpos1(0,theta1[0],theta1[1],i),position0)
 			if distance(np.array(tran2),np.array(trans))<dis:
 
 				print(i)
@@ -482,7 +482,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	# show the frame to our screen
 	cv2.imshow("Frame", image)
-	key = cv2.waitKey(1000) & 0xFF
+	key = cv2.waitKey(10) & 0xFF
 	counter+=1
         # clear the stream in preparation for the next frame
 	rawCapture.truncate(0)
