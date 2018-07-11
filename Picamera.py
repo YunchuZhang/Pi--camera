@@ -9,8 +9,7 @@ import argparse
 import imutils
 import time
 import cv2
-from kinematic import *
-from kinematic1 import *
+
 
 from core import *
 import numpy as ny
@@ -35,6 +34,9 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
+
+dis = 100000
+theta1 = [0,0]
 savet = (0,0,0,0)
 savet1 = (0,0,0,0)
 theta = [0,0,0,0]
@@ -284,7 +286,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 
 		if begin == 1 and dxl_present_position != 0 :
-			theta[ID-11] = (dxl_present_position / 5.688 - 90) * PI / 180 
+			theta[ID-11] = (dxl_present_position / 3.413 - 150) * PI / 180 
 		else :
 			theta[ID-11] = 0
 		print(dxl_present_position)
@@ -300,33 +302,76 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 		position0 = [[90],[0],[0],[1]]
 	position0[0][0] = position0[0][0] - 90
 	print(position0)
-	theta[1] = theta[1] - (94/180.0)*PI + PI*(156/180.0)
-	theta[2] = theta[2] + (38/180.0)*PI - (99/180.0)*PI
-	theta[3] = theta[3] + 0.5*PI - (61/180.0)*PI
+	theta[1] = theta[1] - (105/180.0)*PI + PI*(178/180.0)
+	theta[2] = theta[2] + (30/180.0)*PI - (135/180.0)*PI
+	theta[3] = theta[3] + 0.5*PI - (39/180.0)*PI
 	trans = np.dot(goalpos1(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(trans)
 
 
 
-	print(arm.ee)
 
 
 	basepoint =np.array([trans[0][0],trans[1][0],trans[2][0]])
 	settheta[0] = np.arctan2(basepoint[1], basepoint[0])
 	settheta[0] = int (settheta[0]*180/PI)
 
-	arm.angles =[-PI*(156/180.0)+theta[1],(99/180.0)*PI+theta[2],(61/180.0)*PI+theta[3]]
-	print(arm.ee)
-	#arm.ee = []
-	arm.ee=[basepoint[0],65-basepoint[2],basepoint[1]]
-	(settheta[1],settheta[2],settheta[3]) = np.round(np.rad2deg(arm.angles))
-	print(np.round(np.rad2deg(arm.angles)))
 
-	settheta[1] = settheta[1]+ 4 + 90
-	settheta[2] = settheta[2] - 38
-	settheta[3] = settheta[3] - 90
+
+	n = basepoint[0]**2 + basepoint[1]**2
+	m = basepoint[2] - 65	
+	n = np.sqrt(n)
+
+
+	a = np.sqrt(m**2 + n**2)
+	x = np.sqrt(a**2 + 83**2 - 2*a*83.0*(n/a))
+
+	temp = np.arccos((129**2 + 65**2 - x**2)/(2*129*65))
+
+	t3 = np.arccos((-129**2 + 65**2 + x**2)/(2*65*x))
+	t4 = np.arccos((83**2 - a**2 + x**2)/(2*83*x))
+	t1 = temp
+	t2 = np.arctan2(m,n)
+	print(m)
+	print(n)
+	print(x)
+
+	print(t1)
+	print(t2)
+
+
+	settheta[2] =  180 - int ((t1)*180/PI) -30
+	settheta[1] = 90 - 360 + int((t1+t3+t4)*180/PI) - 15
+	settheta[3] = 180 - int((t3+t4)*180/PI) - 90
+
+
 	print(settheta)
-	print(arm.ee)
+
+	if settheta[2] >= 83:
+		settheta[2] = 83
+		# s2 = 180 - 42 - 63
+		# s1 = 90 - settheta[1] - 20 - t2
+		settheta[1] = settheta[1] + 20
+		# x1 = np.sqrt(a**2 + 129**2 - 2*a*129*np.cos(s1))
+		# x2 = np.arccos((a**2 + x1**2 - 129**2)/(2*a*x1))
+		# x3 = np.arccos((x1**2 + 83**2 - 65**2)/(2*83*x1))
+		for i in range(-140,5,2):
+			theta1[0] = settheta[1] - (105/180.0)*PI + PI*(178/180.0)
+			theta1[1] = settheta[2] + (30/180.0)*PI - (135/180.0)*PI
+			#theta[3] = settheta[3] + 0.5*PI - (61/180.0)*PI
+			#print(i)
+			tran2 = np.dot(goalpos1(0,theta1[0],theta1[1],i),[[100],[0],[0],[1]])
+			if distance(np.array(tran2),np.array(trans))<dis:
+
+				print(i)
+				settheta[3] = i
+				dis = distance(np.array(tran2),np.array(trans))
+				print(dis)
+
+
+
+	print(settheta)
+
 	# PID
 	# nowerrx = dX - setx
 	# iaccux += nowerrx
@@ -369,12 +414,13 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 	#0 ~512 ~1024
 	#-90 ~0 ~ 90
+
 	# IK
 
 
 
 	for i in range(0,4):
-		settheta[i] = int (settheta[i] * 5.688 + 512)
+		settheta[i] = int (settheta[i] * 3.413 + 512)
 		if settheta[i] >= 904:
 			settheta[i] = 904
 		if settheta[i] <= 100:
@@ -442,7 +488,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         # clear the stream in preparation for the next frame
 	rawCapture.truncate(0)
 	elapsed = (time.time() -start)
-	print(elapsed)
+	print('time':elapsed)
 	
 	# if the 'q' key is pressed, stop the loop
 	if key == ord("q"):
