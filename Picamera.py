@@ -261,7 +261,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			if np.abs(xa) == 0 and np.abs(ya) == 0 and np.abs(za) == 0 and begin != 1:
 				clear = 0
 				
-			elif np.abs(xa) < 20 and np.abs(ya) < 20 and np.abs(za) < 30:
+			elif np.abs(xa) < 40 and np.abs(ya) < 40 and np.abs(za) < 50:
 				clear = 1
 				stop = stop + 1
 				
@@ -350,7 +350,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	print(settheta)
 
 	if settheta[2] > 103:
-		settheta[2] = 103
+		settheta[2] = 93
 		# s2 = 180 - 42 - 63
 		# s1 = 90 - settheta[1] - 20 - t2
 		settheta[1] = settheta[1] + 20
