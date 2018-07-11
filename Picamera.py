@@ -297,14 +297,15 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	# write angle
 	if begin == 1 and (theta[0]+theta[1]+theta[2]+theta[3]) != 0 :
 		position0 = [[x0],[y0],[z0],[1]]
+		print(theta)
+		theta[1] = theta[1] - (75/180.0)*PI + PI*(178/180.0)
+		theta[2] = theta[2] + (30/180.0)*PI - (135/180.0)*PI
+		theta[3] = theta[3] + 0.5*PI - (39/180.0)*PI
 	else :
 		position0 = [[90],[0],[0],[1]]
 	position0[0][0] = position0[0][0] - 90
 	print(position0)
-	print(theta)
-	theta[1] = theta[1] - (75/180.0)*PI + PI*(178/180.0)
-	theta[2] = theta[2] + (30/180.0)*PI - (135/180.0)*PI
-	theta[3] = theta[3] + 0.5*PI - (39/180.0)*PI
+
 	trans = np.dot(goalpos1(theta[0],theta[1],theta[2],theta[3]),position0)
 	print(theta)
 	print(trans)
