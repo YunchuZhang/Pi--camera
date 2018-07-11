@@ -144,8 +144,7 @@ time.sleep(0.2)
 # capture frames from the camera
 
 
-arm = Actuator(['z',[129.0,0.,0.], 'z',[65.0,0.,0.],'z',[83.0,0.,0.]])
-arm.angles =[-PI*(156/180.0),(99/180.0)*PI,(61/180.0)*PI]
+
 
 
 
