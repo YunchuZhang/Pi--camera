@@ -488,7 +488,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         # clear the stream in preparation for the next frame
 	rawCapture.truncate(0)
 	elapsed = (time.time() -start)
-	print('time':elapsed)
+	print('time',elapsed)
 	
 	# if the 'q' key is pressed, stop the loop
 	if key == ord("q"):
