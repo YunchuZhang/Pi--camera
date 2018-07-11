@@ -261,7 +261,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			if np.abs(xa) == 0 and np.abs(ya) == 0 and np.abs(za) == 0 and begin != 1:
 				clear = 0
 				
-			elif np.abs(xa) < 40 and np.abs(ya) < 40 and np.abs(za) < 50:
+			elif np.abs(xa) < 20 and np.abs(ya) < 20 and np.abs(za) < 30:
 				clear = 1
 				stop = stop + 1
 				
