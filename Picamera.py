@@ -11,7 +11,7 @@ import time
 import cv2
 
 
-from core import *
+#from core import *
 import numpy as ny
 from kinematic1 import *
 
