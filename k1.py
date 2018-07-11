@@ -6,148 +6,70 @@ import numpy as np
 from ikpy import plot_utils
 from ikpy.chain import Chain
 from ikpy.link import OriginLink, URDFLink
-import autograd
-import autograd.numpy as np  # Thinly-wrapped numpy
-from autograd import grad    # The only autograd function you may ever need
 
-def distance(now, target):
-	x = target - now
-	return x
+dis = 100000
 
-# settheta = [0,0,0,0]
-# trans = np.dot(goalpos(0,0,0,0),[[0],[0],[0],[1]])
-# print(trans)
-# basepoint =[trans[0][0],trans[1][0],trans[2][0]]
-# settheta[0] = np.arctan2(basepoint[1], basepoint[0])
-# settheta[0] = int (settheta[0]*180/PI)
-
-# n = basepoint[0]**2 + basepoint[1]**2
-# m = basepoint[2] - 65	
-# n = np.sqrt(n)
-# a = np.sqrt(m**2 + n**2)
-
-# x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
-# temp = np.arccos((129**2-106**2+a**2)/(2*129*a))
-
-# t1 = temp
-# t2 = np.arctan2(m,n)
-# print(m)
-# print(n)
-# print(x)
-
-# print(t1)
-# print(t2)
-
-
-# settheta[1] = 90 - int ((t2 + t1)*180/PI) - 38
-
-
-# belta = np.arccos((129**2 - a**2 + x**2)/(2*129*x))
-# fi = np.arccos((65**2 - 83**2 + x**2)/(2*65*x))
-# print(belta)
-# print(fi)
-# settheta[2] = 180 - int ((belta + fi)*180/PI) -47
-# settheta[3] = -settheta[1]-settheta[2]-35
-# print(settheta)
-
-
-
-
-
-class NewtonOptimizer(object):
-    """An optimizer based on Newton's method."""
-
-    def __init__(self, tol=1.48e-08, maxiter=50):
-        """Generate an optimizer from an objective function."""
-        self.tol = tol
-        self.maxiter = maxiter
-
-    def prepare(self, f):
-        """Accept an objective function for optimization."""
-        self.g = autograd.grad(f)
-        self.h = autograd.hessian(f)
-
-    def optimize(self, x0, target):
-        """Calculate an optimum argument of an objective function."""
-        x = x0
-        for _ in range(self.maxiter):
-            delta = np.linalg.solve(self.h(x, target), -self.g(x, target))
-            x = x + delta
-            if np.linalg.norm(delta) < self.tol:
-                break
-        return x
-tol = 1.48e-08
-
-
-
+theta1 = [0,0]
 settheta = [0,0,0,0]
-trans = np.dot(goalpos1(0,0,0,0),[[0],[0],[0],[1]])
+trans = np.dot(goalpos1(0,0,0,0),[[102],[-10],[111],[1]])
 print(trans)
-basepoint =np.array([trans[0][0],trans[1][0],trans[2][0]])
+basepoint =[trans[0][0],trans[1][0],trans[2][0]]
 settheta[0] = np.arctan2(basepoint[1], basepoint[0])
 settheta[0] = int (settheta[0]*180/PI)
 
 
-for i in range (-62,62):
-	for j in range (-64,64):
-		for k in range (-70,70):
-			i = i*PI/180.0
-			j = j*PI/180.0
-			k = k*PI/180.0
-			trans1 = np.dot(goalpos1(settheta[0],i,j,k),[[0],[0],[0],[1]])
-			print(trans1)
-			now =np.array([trans1[0][0],trans1[1][0],trans1[2][0]])
-			x = distance(now,basepoint)
-			f = np.sum(np.power(x,2))
-			g = grad(f)
-			h = autograd.hessian(f)
-			delta = np.linalg.solve(h(x, basepoint), -g(x, basepoint))
-			x = x + delta
-			if np.linalg.norm(delta) < tol:
-				aaa=(i,j,k)
-				break
-			
-(i,j,k) = aaa
-print([i*180.0/PI,j*180.0/PI,k*180.0/PI])
-# n = basepoint[0]**2 + basepoint[1]**2
-# m = basepoint[2] - 65	
-# n = np.sqrt(n)
+n = basepoint[0]**2 + basepoint[1]**2
+m = basepoint[2] - 65	
+n = np.sqrt(n)
 
 
-# a = np.sqrt(m**2 + n**2)
-# x = np.sqrt(a**2 + 83**2 - 2*a*83.0*(n/a))
+a = np.sqrt(m**2 + n**2)
+x = np.sqrt(a**2 + 83**2 - 2*a*83.0*(n/a))
 
-# temp = np.arccos((129**2 + 65**2 - x**2)/(2*129*65))
+temp = np.arccos((129**2 + 65**2 - x**2)/(2*129*65))
 
-# t3 = np.arccos((-129**2 + 65**2 + x**2)/(2*65*x))
-# t4 = np.arccos((83**2 - a**2 + x**2)/(2*83*x))
-# t1 = temp
-# t2 = np.arctan2(m,n)
-# print(m)
-# print(n)
-# print(x)
+t3 = np.arccos((-129**2 + 65**2 + x**2)/(2*65*x))
+t4 = np.arccos((83**2 - a**2 + x**2)/(2*83*x))
+t1 = temp
+t2 = np.arctan2(m,n)
+print(m)
+print(n)
+print(x)
 
-# print(t1)
-# print(t2)
-
-
-# settheta[2] =  180 - int ((t1)*180/PI) -42
-# settheta[1] = 90 - 360 + int((t1+t3+t4)*180/PI) - 3
-# settheta[3] = 180 - int((t3+t4)*180/PI) - 90
+print(t1)
+print(t2)
 
 
-# print(settheta)
+settheta[2] =  180 - int ((t1)*180/PI) -30
+settheta[1] = 90 - 360 + int((t1+t3+t4)*180/PI) - 15
+settheta[3] = 180 - int((t3+t4)*180/PI) - 90
 
-# if settheta[2] >= 63:
-# 	settheta[2] = 63
-# 	s2 = 180 - 42 - 63
-# 	s1 = 90 - settheta[1] - 120 - t2
-# 	settheta[1] = settheta[1] + 120
-# 	x1 = np.sqrt(a**2 + 129**2 - 2*a*129*np.cos(s1))
-# 	x2 = np.arccos((a**2 + x1**2 - 129**2)/(2*a*x1))
-# 	x3 = np.arccos((x1**2 + 83**2 - 65**2)/(2*83*x1))
-# 	settheta[3] = 180 -(360 - s1 - s2 - x2 - x3) - 90
-# print(settheta)
+
+print(settheta)
+
+if settheta[2] >= 63:
+	settheta[2] = 63
+	# s2 = 180 - 42 - 63
+	# s1 = 90 - settheta[1] - 20 - t2
+	settheta[1] = settheta[1] + 20
+	# x1 = np.sqrt(a**2 + 129**2 - 2*a*129*np.cos(s1))
+	# x2 = np.arccos((a**2 + x1**2 - 129**2)/(2*a*x1))
+	# x3 = np.arccos((x1**2 + 83**2 - 65**2)/(2*83*x1))
+	for i in range(-140,5,2):
+		theta1[0] = settheta[1] - (105/180.0)*PI + PI*(178/180.0)
+		theta1[1] = settheta[2] + (30/180.0)*PI - (135/180.0)*PI
+		#theta[3] = settheta[3] + 0.5*PI - (61/180.0)*PI
+		#print(i)
+		tran2 = np.dot(goalpos1(0,theta1[0],theta1[1],i),[[100],[0],[0],[1]])
+		if distance(np.array(tran2),np.array(trans))<dis:
+
+			print(i)
+			settheta[3] = i
+			dis = distance(np.array(tran2),np.array(trans))
+			print(dis)
+
+	
+print(settheta)
 
 # (theta1,theta2,theta3,theta4) = (1,1,1,1)
 
@@ -214,6 +136,117 @@ print([i*180.0/PI,j*180.0/PI,k*180.0/PI])
 # print("The angles of each joints are : ", settheta)
 
 
+	# basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+	# settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+	# settheta[0] = int (settheta[0]*180/PI)
+
+	# n = basepoint[0]**2 + basepoint[1]**2
+	# m = basepoint[2] - 65	
+	# n = np.sqrt(n)
+	# a = np.sqrt(m**2 + n**2)
+
+	# x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+	# temp = np.arccos((129**2-106**2+a**2)/(2*129*a))
+	# if math.isnan(temp):
+	# 	print("aaaaa")
+
+	# 	position0[0][0] = position0[0][0] - 20
+	# 	position0[1][0] = position0[1][0] + 20
+	# 	position0[2][0] = position0[2][0] - 20
+	# 	trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
+	# 	print(trans)
+	# 	basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+	# 	settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+	# 	settheta[0] = int (settheta[0]*180/PI)
+
+	# 	n = basepoint[0]**2 + basepoint[1]**2
+	# 	m = basepoint[2] - 65	
+	# 	n = np.sqrt(n)
+	# 	a = np.sqrt(m**2 + n**2)
+
+	# 	x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+	# 	t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
+	# 	if math.isnan(t1):
+	# 		print("bbbbb")
+	# 		position0[0][0] = position0[0][0] - 20
+	# 		position0[1][0] = position0[1][0] + 20
+	# 		position0[2][0] = position0[2][0] - 20
+	# 		trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
+	# 		print(trans)
+
+	# 		basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+	# 		settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+	# 		settheta[0] = int (settheta[0]*180/PI)
+
+	# 		n = basepoint[0]**2 + basepoint[1]**2
+	# 		m = basepoint[2] - 65	
+	# 		n = np.sqrt(n)
+	# 		a = np.sqrt(m**2 + n**2)
+
+	# 		x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+	# 		t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
+	# 		if math.isnan(t1):
+	# 			print("ccccc")
+	# 			position0[0][0] = position0[0][0] - 20
+	# 			position0[1][0] = position0[1][0] + 20
+	# 			position0[2][0] = position0[2][0] - 20
+	# 			trans = np.dot(goalpos(theta[0],theta[1],theta[2],theta[3]),position0)
+	# 			print(trans)
+
+	# 			basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+	# 			settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+	# 			settheta[0] = int (settheta[0]*180/PI)
+
+	# 			n = basepoint[0]**2 + basepoint[1]**2
+	# 			m = basepoint[2] - 65	
+	# 			n = np.sqrt(n)
+	# 			a = np.sqrt(m**2 + n**2)
+
+	# 			x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+	# 			t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
+	# 			if math.isnan(t1):
+	# 				print("last")
+	# 				trans = np.dot(goalpos(0,0,0,0),[[0],[0],[0],[1]])
+	# 				print(trans)
+
+	# 				basepoint =[trans[0][0],trans[1][0],trans[2][0]]
+	# 				settheta[0] = np.arctan2(basepoint[1], basepoint[0])
+	# 				settheta[0] = int (settheta[0]*180/PI)
+
+	# 				n = basepoint[0]**2 + basepoint[1]**2
+	# 				m = basepoint[2] - 65	
+	# 				n = np.sqrt(n)
+	# 				a = np.sqrt(m**2 + n**2)
+
+	# 				x = np.sqrt(65**2 + 83**2 -(2*65*83*np.cos((135/180.0)*PI)))
+	# 				t1 = np.arccos((129**2-106**2+a**2)/(2*129*a))
+	# 			else:
+	# 				pass
+	# 		else:
+	# 			pass
+	# 	else:
+	# 		pass
+	# else:
+	# 	t1 = temp
+	# t2 = np.arctan2(m,n)
+	# print(m)
+	# print(n)
+	# print(x)
+
+	# print(t1)
+	# print(t2)
+
+
+	# settheta[1] = 90 - int ((t2 + t1)*180/PI) - 38
+
+
+	# belta = np.arccos((129**2 - a**2 + x**2)/(2*129*x))
+	# fi = np.arccos((65**2 - 83**2 + x**2)/(2*65*x))
+	# print(belta)
+	# print(fi)
+	# settheta[2] = 180 - int ((belta + fi)*180/PI) -47
+	# settheta[3] =  -settheta[1]-settheta[2]-35
+	# print(settheta)
 
 
 
